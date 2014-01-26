@@ -1,0 +1,21 @@
+<h2>Send a New Request</h2>
+
+<div ng-include="'views/nav.html'"></div>
+
+<h3><strong>Step 3:</strong> Based on their Facebook activity, here are the Facebook Friends who are most likely to have photos of <i>{{selectedObject}}</i> <a href="#/step2">Change</a></h3>
+
+<div class="{{invalidInput}}">Select the people you would like to ask for photos:</div>
+
+
+<ul class="friend-list">
+    <li ng-repeat="friend in friends" ng-click="friend.selected = !friend.selected; clearValidation();" class="{{friend.selected ? 'selected' : ''}}">
+        <img src="//graph.facebook.com/{{friend.id}}/picture" />
+        <span>{{friend.name}}</span>
+    </li>
+</ul>
+
+
+<div class="nav-buttons">
+    <a class="step3-back btn button button-large prev" href="#/step2">Prev</a>
+    <a class="enter-message btn button button-large next" href="#/step4" ng-click="nextIfValid($event)">Enter Message</a>
+</div>

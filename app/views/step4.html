@@ -1,0 +1,22 @@
+<h2>Send a New Request</h2>
+
+<div ng-include="'views/nav.html'"></div>
+
+<!--<p style="text-decoration: line-through">Kooboodle will create a Facebook photo album named "Photos of {{selectedObject}} (Kooboodle)". The album will only be visible to you and to the people who contributed photos to it.</p>-->
+<p>
+    Once a friend uploads photos of <i>{{selectedObject}}</i>, Kooboodle will store them in an album called "Photos of <i>{{selectedObject}}</i> from <i>Example Sender Name</i> via Kooboodle".
+    This album will only be visible to you, and the friend who uploaded the photos.
+</p>
+
+<h3><strong>Step 4:</strong> Send your friends a message asking them for photos of <i>{{selectedObject}}</i></h3>
+<div>
+    <p>To: <i ng-repeat="friend in recipients">{{friend.name}} (<a class="remove-friend link" ng-click="remove(friend)">remove</a>); </i></p>
+    <p>Message: <textarea ng-model="message" class="custom-message"></textarea></p>
+</div>
+
+
+
+<div class="nav-buttons">
+    <a class="step4-back btn button button-large prev" ng-click="saveMessage();" href="#/step3">Prev</a>
+    <a class="send-message btn button button-large next" ng-click="saveMessage();" href="#/step5">SEND MESSAGE</a>
+</div>

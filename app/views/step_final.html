@@ -1,0 +1,26 @@
+<h2 ng-if="isValid">Thank You</h2>
+<h2 ng-if="isValid == false">Almost There</h2>
+
+<div ng-if="isValid">
+    <p>Your request for photos of <b>{{selectedObject}}</b> has been sent to: <b>{{recipients}}</b>.</p>
+
+    <p>When any of the recipients send you photos, you'll be notified.</p>
+
+    <p>In the meantime, feel free to request more photos from friends with Kooboodle.</p>
+
+    <p class="center">
+        <a href="#/step1" class="send-new-request button button-large">Send a New Request</a>
+    </p>
+</div>
+
+<div ng-if="isValid == false">
+    <p>
+        Missing some required info. Please go back and complete.
+    </p>
+    <p>
+        <a href="#/step2" class="step5-back">Back</a>
+    </p>
+
+</div>
+
+

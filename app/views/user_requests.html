@@ -1,0 +1,15 @@
+<div>
+
+    <h2>Requests You've Sent</h2>
+
+    <ul class="request-list">
+        <li ng-repeat="request in userdata.sent ">
+            <!--<div class="button next" ng-click="showNextRequest()">&gt;</div>-->
+            <div class="strong">Photos of {{request.object.name}}</div>
+            <ul class="user-list">
+                <li ng-repeat="user in request.recipients" ng-include="'views/user_item.html'"></li>
+            </ul>
+        </li>
+    </ul>
+
+</div>

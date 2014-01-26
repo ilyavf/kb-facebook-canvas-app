@@ -1,0 +1,503 @@
+@font-face {
+    font-family: kbMainFont;
+    src: url(Roboto-Regular.ttf);
+}
+@font-face {
+    font-family: kbMainFontBold;
+    src: url(Roboto-Bold.ttf);
+}
+html {
+    font-size: 62.5%;
+}
+body {
+    background-color: #e8edf2;
+    font-size: 1.6rem;
+    color: #38383e;
+}
+strong, b, .strong {
+    font-weight: normal;
+    font-family: kbMainFontBold;
+}
+.clickable {
+    cursor: pointer;
+}
+.center {
+    text-align: center;
+}
+.left {
+    float: left;
+}
+.right {
+    float: right;
+}
+.middle {
+    line-height: 33px;
+}
+
+.wrapper {
+    width: 800px;
+    margin: 0px auto;
+    background-color: white;
+    border: 1px solid #cdd2d9;
+    padding: 15px;
+}
+
+#kb_app_container {
+    background-color: #eff0f2;
+    font-family: kbMainFont;
+    border: 1px solid #cad2d5;
+}
+.view-container {
+    margin: 25px 40px 45px;
+}
+h1 {
+    font-size: 4.6rem;
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: none;
+}
+h1 {
+    background: url('../images/logo-kooboodle.png') no-repeat ;
+    line-height: 82px;
+    text-align: right;
+    margin: 30px 95px 20px;
+}
+h2 {
+    font-family: kbMainFontBold;
+    font-size: 1.6rem;
+    font-weight: normal;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 20px 0;
+}
+h3 {
+    font-size: 1.6rem;
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: none;
+    margin: 20px 0 40px;
+}
+h3 a, h3 a:hover, h3 a:visited, h3 a:active {
+    color: #ccc;
+    font-size: 1.2rem;
+}
+h3 strong {
+    margin-right: 15px;
+    display: block;
+    height: 25px;
+    float: left;
+}
+h3 strong, h3.accent1 {
+    font-family: kbMainFontBold;
+    text-transform: uppercase;
+    color: #be1451;
+}
+.flow-receiver h3 {
+    margin-bottom: 20px;
+}
+.nowrap, h3 i {
+    white-space: nowrap;
+}
+.clear {
+    overflow: hidden;
+}
+.center {
+    text-align: center;
+}
+.info-block {
+    text-align: center;
+    margin: 20px 0 20px;
+    line-height: 2.6rem;
+
+}
+hr {
+    border: none;
+    border-top: 1px solid white;
+    border-bottom: 1px solid #dde2e5;
+    margin: 20px 1px;
+    height: 1px;
+}
+.button {
+    cursor: pointer;
+}
+.button-large {
+    display: inline-block;
+    /*padding: 15px 20px;*/
+    border-radius: 10px;
+    background: #999;
+    font-size: 1.4rem;
+    line-height: 20px;
+    font-weight: normal;
+    min-width: 70px;
+    padding: 10px 15px;
+    text-align: center;
+}
+.button-large:hover {
+    background: #777;
+}
+.button.accent1 {
+    background: #3fabd4;
+}
+.button.accent2 {
+    background: #4fae8c;
+}
+.button.prev {
+    background: #899aaa;
+    float: left;
+}
+.button.next {
+    background: #7a72a9;
+    float: right;
+}
+.nav-buttons {
+    overflow: hidden;
+}
+a.button-large, a.button-large:hover, a.button-large:active {
+    color: white;
+    text-decoration: none;
+}
+.buttons-container {
+    max-width: 385px;
+    margin: 20px auto;
+}
+.buttons-container.wide {
+    max-width: 430px;
+}
+.buttons-container .button-container {
+    display: inline-block;
+    margin: 0 10px;
+    width: 170px;
+    vertical-align: top;
+}
+.buttons-container .button-container.wide {
+    width: 185px;
+}
+.buttons-container .button-container .button-description {
+    font-size: 1.1rem;
+    margin-top: 5px;
+    text-align: center;
+}
+.buttons-container .button-container .button {
+    display: block;
+}
+.friend-list {
+    list-style: none;
+    overflow: hidden;
+    padding: 0;
+    margin: 20px 0;
+}
+.friend-list li, .user-item {
+    float: left;
+    width: 222px;
+    padding: 5px;
+    margin-right: 4px;
+    border: 1px solid #d6dbe2;
+    border-bottom: 1px #ddd solid;
+    font-size: 1.2rem;
+    font-family: Arial;
+    color: #333;
+    background: white;
+}
+.friend-list li img, .user-item img {
+    vertical-align: middle;
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+}
+.user-item {
+    float: none;
+    width: auto;
+    font-size: 1.3rem;
+}
+.friend-list li.selected {
+    background: #e8ebef url(../images/icon-check.png) no-repeat 95% 50%;
+    font-weight: bold;
+}
+.search {
+    margin: 20px 0;
+}
+.search .label {
+    font-family: Arial;
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+.search input {
+    width: 640px;
+    line-height: 2rem;
+    font-size: 1.4rem;
+    padding-left: 7px;
+}
+.link {
+    cursor: pointer;
+    text-decoration: underline;
+}
+.link:hover {
+    text-decoration: underline;
+}
+
+.user-requests .request-list {
+    max-height: 200px;
+    overflow: auto;
+}
+
+
+/* ANIMATIONS */
+.view-container {
+    position: relative;
+    width: inherit;
+}
+.view-container .slide {
+    width: inherit;
+    position: absolute;
+    top: 0;
+}
+.slide.ng-enter, .slide.ng-leave {
+    -webkit-transition: 0.5s linear all;
+    transition: .5s linear all;
+}
+/* starting animations for enter */
+.slide.ng-enter {
+    margin-left: 400px;
+    opacity: 0;
+}
+/* terminal animations for enter */
+.slide.ng-enter-active {
+    margin-left: 0;
+    opacity: 1;
+}
+/* starting animations for leave */
+.slide.ng-leave {
+    margin-left: 0;
+    opacity: 1;
+}
+/* terminal animations for leave */
+.slide.ng-leave-active {
+    margin-left: -400px;
+    opacity: 0;
+}
+
+
+.animate-show-hide.ng-hide-add, .animate-show-hide.ng-hide-remove {
+    -webkit-transition:all linear 1s;
+    -moz-transition:all linear 1s;
+    -o-transition:all linear 1s;
+    transition:all linear 1s;
+    display:block!important;
+}
+.animate-show-hide.ng-hide-add.ng-hide-add-active,
+.animate-show-hide.ng-hide-remove {
+    opacity:0;
+}
+.animate-show-hide.ng-hide-add,
+.animate-show-hide.ng-hide-remove.ng-hide-remove-active {
+    opacity:1;
+}
+
+/* REQUESTS SENT */
+.request-list, .request-list .user-list {
+    padding: 0;
+    list-style-type: none;
+}
+.request-list {
+    max-height: 200px;
+    padding: 0;
+    list-style-type: none;
+    margin: 0;
+}
+.request-list > li > div {
+    color: #685f9a;
+}
+.request-list li {
+    background-color: white;
+    border: 1px solid #d8d9db;
+}
+.request-list > li > div {
+    padding-left: 20px;
+    border-bottom: 1px solid #d8d9db;
+    line-height: 40px;
+}
+.request-list .user-list {
+    max-height: 155px;
+    overflow: auto;
+}
+.request-list .user-list li {
+    font-size: 1.2rem;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    padding: 5px 20px;
+    height: 32px;
+}
+.request-list .user-list li img {
+    width: 32px;
+    float: left;
+}
+.request-list .user-list li div {
+    margin-left: 40px;
+}
+.button-round {
+    font-size: 1.2rem;
+    background-color: #889eb1;
+    border-radius: 15px;
+    color: white;
+    padding: 2px 15px;
+    text-decoration: none;
+}
+.request-list .user-list li .button.button-round {
+    float: right;
+    margin: 6px 0 0 0;
+}
+.request-list .user-list li .button.button-round.open-album {
+    background-color: #4fae8c;
+}
+.request-list .button.next {
+    float: right;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+/* REQUEST NAV BAR */
+ul.request-nav {
+    padding: 0;
+    list-style-type: none;
+    /*width: 572px;*/
+    width: 704px;
+    height: 45px;
+    background: url(../images/steps-bg.png) no-repeat 66px 0;
+    margin: 0 auto;
+}
+.request-nav li.nav-item {
+    width: 176px;
+    text-align: center;
+    color: #AAAAAA;
+    line-height: 45px;
+    float: left;
+    background: url(../images/circle-grey.png) no-repeat 50% 50%;
+}
+.request-nav li.nav-item:nth-child(2) {
+    width: 175px;
+}
+.request-nav li.nav-item.active {
+    background-image: url(../images/circle-red.png);
+    color: white;
+}
+.request-nav li.nav-item.passed {
+    background-image: url(../images/circle-dark.png);
+    color: white;
+}
+
+
+.circle {
+    display: inline-block;
+    text-align: center;
+    line-height: 25px;
+    width: 25px;
+    height: 26px;
+    color: white;
+    background: url(../images/circle-dark.png) no-repeat;
+    background-size: 25px 25px;
+    background-position-y: 1px;
+    margin: 0 3px;
+    font-style: italic;
+    font-size: 1.4rem;
+}
+
+.loading {
+    padding: 26px;
+    background: url(../images/loader.gif) no-repeat 100%;
+}
+.button.loading {
+    padding: 0;
+}
+
+ul.uploaded-photos {
+    padding: 0;
+    text-align: center;
+}
+.uploaded-photos li {
+    display: inline-block;
+    border: 5px white solid;
+    margin: 0 5px;
+    width: 90px;
+    height: 90px;
+    overflow: hidden;
+}
+.uploaded-photos li img {
+    min-height: 100%;
+    min-width: 100%;
+    margin-left: -50%;
+}
+
+.search-input {
+    border: 1px solid #ccc;
+}
+.animate-invalid-input {
+    animation: blinkBorderColor 1s forwards;
+    -webkit-animation: blinkBorderColor 1s forwards;
+    -moz-animation: blinkBorderColor 1s forwards;
+    -o-animation: blinkBorderColor 1s forwards;
+    animation-iteration-count: 3;
+    -webkit-animation-iteration-count: 3;
+    -moz-animation-iteration-count: 3;
+    -o-animation-iteration-count: 3;
+}
+@keyframes blinkBorderColor {
+    0%   {border-color: #ccc;}
+    50%   {border-color: red;}
+    100% {border-color: #ccc;}
+}
+@-moz-keyframes blinkBorderColor {
+    0%   {border-color: #ccc;}
+    50%   {border-color: red;}
+    100% {border-color: #ccc;}
+}
+@-o-keyframes blinkBorderColor {
+    0%   {border-color: #ccc;}
+    50%   {border-color: red;}
+    100% {border-color: #ccc;}
+}
+@-webkit-keyframes blinkBorderColor {
+    0%   {border-color: #ccc;}
+    50%   {border-color: red;}
+    100% {border-color: #ccc;}
+}
+.animate-invalid-text  {
+    animation: blinkTextColor 1s forwards;
+    -webkit-animation: blinkTextColor 1s forwards;
+    -moz-animation: blinkTextColor 1s forwards;
+    -o-animation: blinkTextColor 1s forwards;
+    animation-iteration-count: 3;
+    -webkit-animation-iteration-count: 3;
+    -moz-animation-iteration-count: 3;
+    -o-animation-iteration-count: 3;
+}@keyframes blinkTextColor {
+     0%   {color: #38383e;}
+     50%   {color: red;}
+     100% {color: #38383e;}
+ }
+@-moz-keyframes blinkTextColor {
+    0%   {color: #38383e;}
+    50%   {color: red;}
+    100% {color: #38383e;}
+}
+@-o-keyframes blinkTextColor {
+    0%   {color: #38383e;}
+    50%   {color: red;}
+    100% {color: #38383e;}
+}
+@-webkit-keyframes blinkTextColor {
+    0%   {color: #38383e;}
+    50%   {color: red;}
+    100% {color: #38383e;}
+}
+
+textarea.custom-message {
+    width: 100%;
+}
+
+.flow-receiver hr {
+    margin-left: -39px;
+    margin-right: -39px;
+}
