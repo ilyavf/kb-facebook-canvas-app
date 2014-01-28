@@ -36,7 +36,7 @@ angular.module('myappApp')
         $scope.notifyEmail = {value: ''};
         $scope.saveEmailAddress = function () {
             console.log('[Receiverstep1Ctrl.saveEmailAddress] ' + $scope.notifyEmail.value);
-            CurrentUser.$fire.info.notifyEmail = $scope.notifyEmail.value;
+            CurrentUser.$fire.notifyEmail = $scope.notifyEmail.value;
             CurrentUser.$fire.$save();
         }
 
