@@ -4,7 +4,7 @@
     <div ng-show="notifyIsVisible">
         <h2>Sorry</h2>
         <p>Kooboodle PhotoFinder is not yet available. Would you like to be notified when it is ready?</p>
-        <p><strong>Email Address</strong> &nbsp; <input type="email" /></p>
+        <p><strong>Email Address</strong> &nbsp; <input type="text" ng-model="notifyEmail.value" /></p>
         <a class="button button-large accent2" ng-click="notify()">Notify Me</a>
         <a class="button button-large" ng-click="close()">No Thanks</a>
     </div>

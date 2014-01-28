@@ -33,6 +33,12 @@ angular.module('myappApp')
         $scope.showDialogPhotofinder = function () {
             $scope.dialogPhotofinderIsHidden = false;
         };
+        $scope.notifyEmail = {value: ''};
+        $scope.saveEmailAddress = function () {
+            console.log('[Receiverstep1Ctrl.saveEmailAddress] ' + $scope.notifyEmail.value);
+            CurrentUser.$fire.info.notifyEmail = $scope.notifyEmail.value;
+            CurrentUser.$fire.$save();
+        }
 
         //angular.forEach(pending, function (request) {});
         if (pending.length === 0) {
