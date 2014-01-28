@@ -25,6 +25,15 @@ angular.module('myappApp')
         $scope.senderImgUrl = '//graph.facebook.com/' + pendingRequest.sender.username + '/picture';
         $scope.objectName = pendingRequest.object.name;
 
+
+        $scope.dialogPhotofinderIsHidden = true;
+        $scope.hideDialogPhotofinder = function () {
+            $scope.dialogPhotofinderIsHidden = true;
+        };
+        $scope.showDialogPhotofinder = function () {
+            $scope.dialogPhotofinderIsHidden = false;
+        };
+
         //angular.forEach(pending, function (request) {});
         if (pending.length === 0) {
             console.log('WARNING: no pending requests found in ReceiverStep1');

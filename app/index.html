@@ -3,12 +3,25 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Kooboodle for Facebook</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
+    <style>
+        [ng-cloak], .hidden {
+            display: none;
+        }
+        html {
+            font-size: 62.5%;
+        }
+        body {
+            background-color: #e8edf2;
+            font-size: 1.6rem;
+            color: #38383e;
+        }
+    </style>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
@@ -23,23 +36,10 @@
           CONFIG.APP_ID = '203880539796100';
           CONFIG.USER_ID = '100004353247811';
       </script>
-      <style>
-          [ng-cloak], .hidden {
-              display: none;
-          }
-          html {
-              font-size: 62.5%;
-          }
-          body {
-              background-color: #e8edf2;
-              font-size: 1.6rem;
-              color: #38383e;
-          }
-      </style>
-  </head>
-  <body ng-app="myappApp">
+</head>
+<body ng-app="myappApp">
     <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
@@ -94,37 +94,38 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/services/myservice.js"></script>
-        <script src="scripts/services/myfactory.js"></script>
-        <script src="scripts/services/currentuser.js"></script>
-        <script src="scripts/services/facebookfriends.js"></script>
-        <script src="scripts/services/facebooktagfriends.js"></script>
-        <script src="scripts/services/extendfacebookfriends.js"></script>
-        <script src="scripts/services/clonefriends.js"></script>
-        <script src="scripts/services/friendobjects.js"></script>
-        <script src="scripts/services/friendreceivers.js"></script>
-        <script src="scripts/services/fireusersurl.js"></script>
-        <script src="scripts/services/getuser.js"></script>
-        <script src="scripts/services/userrequests.js"></script>
-        <script src="scripts/services/sendrequest.js"></script>
-        <script src="scripts/controllers/init.js"></script>
-        <script src="scripts/controllers/event.js"></script>
-        <script src="scripts/controllers/userrequests.js"></script>
-        <script src="scripts/filters/emptyifblankorselected.js"></script>
-        <script src="scripts/services/sendreminder.js"></script>
-        <script src="scripts/services/requestobject.js"></script>
-        <script src="scripts/controllers/step1.js"></script>
-        <script src="scripts/controllers/step2.js"></script>
-        <script src="scripts/controllers/step3.js"></script>
-        <script src="scripts/controllers/step4.js"></script>
-        <script src="scripts/controllers/step5.js"></script>
-        <script src="scripts/controllers/receiverstep1.js"></script>
-        <script src="scripts/services/getalbumid.js"></script>
-        <script src="scripts/services/createsharedalbum.js"></script>
-        <script src="scripts/services/getphotourlpromise.js"></script>
-        <!-- endbuild -->
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/services/myservice.js"></script>
+    <script src="scripts/services/myfactory.js"></script>
+    <script src="scripts/services/currentuser.js"></script>
+    <script src="scripts/services/facebookfriends.js"></script>
+    <script src="scripts/services/facebooktagfriends.js"></script>
+    <script src="scripts/services/extendfacebookfriends.js"></script>
+    <script src="scripts/services/clonefriends.js"></script>
+    <script src="scripts/services/friendobjects.js"></script>
+    <script src="scripts/services/friendreceivers.js"></script>
+    <script src="scripts/services/fireusersurl.js"></script>
+    <script src="scripts/services/getuser.js"></script>
+    <script src="scripts/services/userrequests.js"></script>
+    <script src="scripts/services/sendrequest.js"></script>
+    <script src="scripts/controllers/init.js"></script>
+    <script src="scripts/controllers/event.js"></script>
+    <script src="scripts/controllers/userrequests.js"></script>
+    <script src="scripts/filters/emptyifblankorselected.js"></script>
+    <script src="scripts/services/sendreminder.js"></script>
+    <script src="scripts/services/requestobject.js"></script>
+    <script src="scripts/controllers/step1.js"></script>
+    <script src="scripts/controllers/step2.js"></script>
+    <script src="scripts/controllers/step3.js"></script>
+    <script src="scripts/controllers/step4.js"></script>
+    <script src="scripts/controllers/step5.js"></script>
+    <script src="scripts/controllers/receiverstep1.js"></script>
+    <script src="scripts/services/getalbumid.js"></script>
+    <script src="scripts/services/createsharedalbum.js"></script>
+    <script src="scripts/services/getphotourlpromise.js"></script>
+    <script src="scripts/directives/kb-dialog-photofinder.js"></script>
+    <!-- endbuild -->
 </body>
 </html>
