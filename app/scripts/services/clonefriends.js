@@ -12,11 +12,9 @@ angular.module('myappApp')
             }
             dataService.then(function(friends) {
                 console.log('[CloneFriends] then for ' + name + '(' + source + ')', friends);
-                //$rootScope.$apply(function () {
                 _.each(friends, function (f) {
                     friendsCloned.push(_.clone(f));
                 });
-                //});
             });
             return friendsCloned;
         }

@@ -1,18 +1,19 @@
 'use strict';
 
 angular.module('myappApp')
-.factory('CurrentUser', function ($rootScope, GetUser, $firebase) {
+.factory('CurrentUser', function ($q, $rootScope, GetUser, $firebase) {
 
-    var userId = CONFIG.USER_ID,
+    var loginStatusDeferred = $q.defer(),
         user = {
             initialized: false,
-            loginStatus: false,
+            loginStatus: loginStatusDeferred.promise,
             info: {
-                id: userId,
+                id: null,
                 name: null,
                 username: null
             },
-            $fire: $firebase(GetUser(userId))
+            $fire: null
+            //$fire: $firebase(GetUser(userId))
             //data: GetUser(userId)
         };
 
@@ -23,10 +24,7 @@ angular.module('myappApp')
         console.log(response);
         if (response && response.status === "connected") {
             console.log('Already connected with FB');
-            $rootScope.$apply(function () {
-                user.loginStatus = true;
-            });
-            fb_getMyInfo(user.info, user.$fire);
+            fb_getMyInfo(user);
         } else {
             console.log('Not logged in. Logging in to Facebook...');
             fb_login(user);
@@ -41,23 +39,29 @@ angular.module('myappApp')
         FB.login(function(response) {
             if (response.authResponse) {
                 console.log('Welcome!  Fetching your information.... ');
-                //$rootScope.$apply(function () {
-                    user.loginStatus = true;
-                //});
-                fb_getMyInfo(user.info, user.$fire);
+                fb_getMyInfo(user);
 
             } else {
                 console.log('User cancelled login or did not fully authorize.');
             }
         }, {scope: 'user_friends,user_photos,publish_stream'});
     }
-    function fb_getMyInfo (info, fb_data) {
+    function fb_getMyInfo (user) {
         FB.api('/me?fields=name,username', function (response) {
-            console.log('[FB.api:/me] Current user: ' + response.name + '.', response);
-            info.id = response.id;
-            info.name = response.name;
-            info.username = response.username;
-            fb_data.$child('info').$set(info);
+            console.log('[fb_getMyInfo]: FB.api/me - Current user: ' + response.name + '.', response);
+            user.info.id = response.id;
+            user.info.name = response.name;
+            user.info.username = response.username;
+            user.$fire = $firebase(GetUser(user.info.id));
+            user.$fire.$on('loaded', function (data) {
+                console.log('[fb_getMyInfo] firebase user data loaded: ', data);
+                user.$fire.$child('info').$set(user.info);
+
+                $rootScope.$apply(function () {
+                    console.log('- resolving loginStatusDeferred to TRUE...');
+                    loginStatusDeferred.resolve(true);
+                });
+            });
         });
     }
 });

@@ -10,7 +10,7 @@ angular.module('myappApp')
         }
 
         $scope.currentRequestIndex = 0;
-        $scope.userdata = CurrentUser.$fire;
+        $scope.userdata = []; //CurrentUser.$fire;
         $scope.show = false;
 
         $scope.$on('wizardIsActive', function () {
@@ -42,5 +42,10 @@ angular.module('myappApp')
                 && user.isReminderSent !== true
                 && (!user.date || new Date(user.date).toDateString() != new Date().toDateString());
         }
+
+        CurrentUser.loginStatus.then(function (loginStatus) {
+            $scope.userdata = CurrentUser.$fire;
+        });
+
         console.log('[UserrequestsCtrl] finished');
     });
