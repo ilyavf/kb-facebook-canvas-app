@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('Receiverstep1Ctrl', function ($scope, $upload, CurrentUser, $location, getAlbumId, GetPhotoUrlPromise, GetUser) {
+    .controller('Receiverstep1Ctrl', function ($scope, CurrentUser, $location, $upload, getAlbumId, GetPhotoUrlPromise, GetUser) {
         $scope.$emit('changeFlow', 'receiver');
         console.log('Receiver Step 1');
         $scope.isUploaderVisible = false;
@@ -66,6 +66,8 @@ angular.module('myappApp')
             $scope.onFileSelect = function($files) {
                 $scope.loading = "loading";
 
+                var uploadedFiles = 0;
+
                 //$files: an array of files selected, each file has name, size, and type.
                 for (var i = 0; i < $files.length; i++) {
                     var file = $files[i];
@@ -89,7 +91,7 @@ angular.module('myappApp')
                             //formDataAppender: function(formData, key, val){}
                         })
                             .progress(function(evt) {
-                                console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+                                //console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
                             })
                             .success(function(data, status, headers, config) {
                                 // file is uploaded successfully
@@ -98,8 +100,11 @@ angular.module('myappApp')
                                     GetPhotoUrlPromise(data.id).then(function (url) {
                                         console.log('Uploaded: ' + i + ', ' + file.name);
                                         $scope.uploadedPhotos.push(url);
-                                        if (i === $files.length - 1)
+                                        uploadedFiles++;
+                                        if (uploadedFiles === $files.length) {
+                                            console.log('ALL files uploaded now' + uploadedFiles);
                                             $scope.loading = "";
+                                        }
                                     });
                                 }
 
