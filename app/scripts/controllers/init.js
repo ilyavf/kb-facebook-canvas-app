@@ -3,7 +3,8 @@
 
 angular.module('myappApp')
     .controller('InitCtrl', function ($scope, $location, CurrentUser) {
-        console.log('Init');
+        console.log('InitCtrl');
+        CurrentUser.initialized = true;
         $scope.$watch(
             function() { return CurrentUser.loginStatus; },
             function (newVal, oldVal) {

@@ -5,6 +5,7 @@ angular.module('myappApp')
 
     var userId = CONFIG.USER_ID,
         user = {
+            initialized: false,
             loginStatus: false,
             info: {
                 id: userId,
@@ -27,7 +28,8 @@ angular.module('myappApp')
             });
             fb_getMyInfo(user.info, user.$fire);
         } else {
-            fb_login(user.info);
+            console.log('Not logged in. Logging in to Facebook...');
+            fb_login(user);
         }
     });
 
@@ -39,7 +41,10 @@ angular.module('myappApp')
         FB.login(function(response) {
             if (response.authResponse) {
                 console.log('Welcome!  Fetching your information.... ');
-                user.loginStatus = true;
+                //$rootScope.$apply(function () {
+                    user.loginStatus = true;
+                //});
+                fb_getMyInfo(user.info, user.$fire);
 
             } else {
                 console.log('User cancelled login or did not fully authorize.');

@@ -21,6 +21,12 @@ angular.module('myappApp')
         var pending = _.where(CurrentUser.$fire.received, {status: 'pending'}),
             pendingRequest = pending[0];
 
+        if (!pendingRequest) {
+            console.log('[Receiverstep1Ctrl] no pending requests found. Redirecting to init step...');
+            $location.path('/');
+            return;
+        }
+
         $scope.senderName = pendingRequest.sender.name;
         $scope.senderImgUrl = '//graph.facebook.com/' + pendingRequest.sender.username + '/picture';
         $scope.objectName = pendingRequest.object.name;

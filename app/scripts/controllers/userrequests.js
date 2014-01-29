@@ -1,8 +1,14 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('UserrequestsCtrl', function($scope, CurrentUser, SendReminder) {
-        console.log('UserrequestsCtrl');
+    .controller('UserrequestsCtrl', function($scope, $location, CurrentUser, SendReminder) {
+        console.log('[UserrequestsCtrl]');
+
+        if (!CurrentUser.initialized && $location.path() !== '/') {
+            console.log('[UserrequestsCtrl] not initialized yet. Redirecting to init step...');
+            $location.path('/');
+        }
+
         $scope.currentRequestIndex = 0;
         $scope.userdata = CurrentUser.$fire;
         $scope.show = false;
@@ -36,4 +42,5 @@ angular.module('myappApp')
                 && user.isReminderSent !== true
                 && (!user.date || new Date(user.date).toDateString() != new Date().toDateString());
         }
+        console.log('[UserrequestsCtrl] finished');
     });
