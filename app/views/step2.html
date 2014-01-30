@@ -2,18 +2,24 @@
 
 <div ng-include="'views/nav.html'"></div>
 
-<h3><strong>Step 2:</strong> Search for a friend that you'd like to get photos of <i>or</i>&nbsp; find more photos of yourself</h3>
+<div ng-if="subjectType == 'friend'">
 
-<div class="search">
-    <span class="label">Search</span> <input type="text" class="search-input {{invalidInput}}" ng-model="friendNameQuery" />
+    <h3><strong>Step 2:</strong> Type your name to find more photos of yourself <i>or</i>&nbsp; search for a friend that you'd like to get photos of</h3>
+
+    <div class="search">
+        <input type="text" class="search-friend {{invalidInput}}" ng-model="friendNameQuery"
+            placeholder="Start searching"/>
+    </div>
+
+    <ul class="friend-list">
+        <li ng-repeat="friend in friends | emptyIfBlankOrSelected:friendNameQuery" ng-click="singleSelect(friend)" class="{{friend.selected ? 'selected' : ''}}">
+            <img src="//graph.facebook.com/{{friend.id}}/picture" />
+            <span>{{friend.name}}</span>
+        </li>
+    </ul>
 </div>
 
-<ul class="friend-list">
-    <li ng-repeat="friend in friends | emptyIfBlankOrSelected:friendNameQuery" ng-click="singleSelect(friend)" class="{{friend.selected ? 'selected' : ''}}">
-        <img src="//graph.facebook.com/{{friend.id}}/picture" />
-        <span>{{friend.name}}</span>
-    </li>
-</ul>
+<div ng-if="subjectType == 'event'" ng-include="'views/step2_event.html'">Event</div>
 
 <div class="nav-buttons">
     <a class="step2-back btn button button-large prev" href="#/step1">Back</a>

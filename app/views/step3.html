@@ -2,10 +2,9 @@
 
 <div ng-include="'views/nav.html'"></div>
 
-<h3><strong>Step 3:</strong> Based on their Facebook activity, here are the Facebook Friends who are most likely to have photos of <i>{{selectedObject}}</i> <a href="#/step2">Change</a></h3>
+<p class="info">Based on their Facebook activity, here are the Facebook Friends who are most likely to have photos of <b>{{selectedObject}}</b> <a href="#/step2">Change</a></p>
 
-<div class="{{invalidInput}}">Select the people you would like to ask for photos:</div>
-
+<h3 class="{{invalidInput}}"><strong>Step 3:</strong>Select the people you would like to ask for photos:</h3>
 
 <ul class="friend-list">
     <li ng-repeat="friend in friends" ng-click="friend.selected = !friend.selected; clearValidation();" class="{{friend.selected ? 'selected' : ''}}">

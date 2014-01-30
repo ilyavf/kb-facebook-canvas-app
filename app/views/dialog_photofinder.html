@@ -3,16 +3,22 @@
 
     <div class="dialog-body center">
         <div ng-show="notifyIsVisible">
-            <h2>Sorry</h2>
-            <p>Kooboodle PhotoFinder is not yet available. Would you like to be notified when it is ready?</p>
-            <p><strong>Email Address</strong> &nbsp; <input type="text" ng-model="notifyEmail.value" /></p>
-            <a class="button button-large accent2" ng-click="notify()">Notify Me</a>
-            <a class="button button-large" ng-click="close()">No Thanks</a>
+            <h1>Sorry</h1>
+            <p>Kooboodle PhotoFinder is not yet available. <br /><strong>Would you like to be notified when it is ready?</strong></p>
+
+            <input type="text" ng-model="notifyEmail.value" placeholder="Enter your email address" />
+
+            <div class="nav-buttons">
+                <a class="button button-large prev" ng-click="close()">No Thanks</a>
+                <a class="button button-large next" ng-click="notify()">Notify Me</a>
+            </div>
         </div>
         <div ng-show="thankyouIsVisible">
-            <h2>Thank you</h2>
+            <h1>Thank you</h1>
             <p>We will notify you once Kooboodle PhotoFinder is available. In meantime you can <strong>Upload Photos Manually</strong></p>
-            <a ng-click="close()" class="button-large">OK</a>
+            <div class="center">
+                <a ng-click="close()" class="button button-large accent3">OK</a>
+            </div>
         </div>
     </div>
 </div>

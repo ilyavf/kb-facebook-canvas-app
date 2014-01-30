@@ -2,8 +2,8 @@
 
 angular.module('myappApp')
     .controller('Step2Ctrl', function($scope, FriendObjects, requestObject) {
-        console.log('Step 2');
-        requestObject.type = 'friend';
+        $scope.subjectType = requestObject.type;
+        console.log('Step 2 ' + requestObject.type, $scope.subjectType);
         $scope.friends = FriendObjects;
         $scope.singleSelect = function (friend) {
             $scope.invalidInput = '';

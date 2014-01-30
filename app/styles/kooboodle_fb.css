@@ -24,6 +24,9 @@ strong, b, .strong {
 .center {
     text-align: center;
 }
+div.center {
+    margin: 30px 0;
+}
 .left {
     float: left;
 }
@@ -34,16 +37,20 @@ strong, b, .strong {
     line-height: 33px;
 }
 
+.wrapper-shadow {
+    width: 830px;
+    margin: 25px auto;
+    padding-bottom: 95px;
+    background: url(../images/bg_shadow.png) no-repeat 50% 100%;
+}
 .wrapper {
-    width: 800px;
-    margin: 0px auto;
     background-color: white;
     border: 1px solid #cdd2d9;
     padding: 15px;
 }
 
 #kb_app_container {
-    background-color: #eff0f2;
+    background: #eff0f2 url(../images/handmadepaper.png);
     font-family: kbMainFont;
     border: 1px solid #cad2d5;
 }
@@ -55,12 +62,12 @@ h1 {
     font-weight: normal;
     font-style: normal;
     text-decoration: none;
-}
-h1 {
-    background: url('../images/logo-kooboodle.png') no-repeat ;
     line-height: 82px;
+}
+h1.header {
     text-align: right;
     margin: 30px 95px 20px;
+    background: url('../images/logo-kooboodle.png') no-repeat ;
 }
 h2 {
     font-family: kbMainFontBold;
@@ -75,10 +82,10 @@ h3 {
     font-weight: normal;
     font-style: normal;
     text-decoration: none;
-    margin: 20px 0 40px;
+    margin: 25px 0;
 }
 h3 a, h3 a:hover, h3 a:visited, h3 a:active {
-    color: #ccc;
+    color: #60569f;
     font-size: 1.2rem;
 }
 h3 strong {
@@ -108,7 +115,13 @@ h3 strong, h3.accent1 {
     text-align: center;
     margin: 20px 0 20px;
     line-height: 2.6rem;
-
+}
+.info {
+    background: #e5f0ea;
+    border: 1px solid #c8dcd3;
+    font-size: 1.3rem;
+    padding: 20px;
+    color: #576c63;
 }
 hr {
     border: none;
@@ -122,8 +135,7 @@ hr {
 }
 .button-large {
     display: inline-block;
-    /*padding: 15px 20px;*/
-    border-radius: 10px;
+    border-radius: 5px;
     background: #999;
     font-size: 1.4rem;
     line-height: 20px;
@@ -141,16 +153,22 @@ hr {
 .button.accent2 {
     background: #4fae8c;
 }
+.button.accent2 {
+    background: #4fae8c;
+}
 .button.prev {
     background: #899aaa;
     float: left;
 }
-.button.next {
+.button.next, .button.accent3 {
     background: #7a72a9;
+}
+.button.next {
     float: right;
 }
 .nav-buttons {
     overflow: hidden;
+    margin-top: 35px;
 }
 a.button-large, a.button-large:hover, a.button-large:active {
     color: white;
@@ -168,6 +186,7 @@ a.button-large, a.button-large:hover, a.button-large:active {
     margin: 0 10px;
     width: 170px;
     vertical-align: top;
+    text-align: center;
 }
 .buttons-container .button-container.wide {
     width: 185px;
@@ -175,7 +194,10 @@ a.button-large, a.button-large:hover, a.button-large:active {
 .buttons-container .button-container .button-description {
     font-size: 1.1rem;
     margin-top: 5px;
-    text-align: center;
+}
+.description {
+    font-size: 1.2rem;
+    margin-top: 5px;
 }
 .buttons-container .button-container .button {
     display: block;
@@ -227,6 +249,7 @@ a.button-large, a.button-large:hover, a.button-large:active {
     line-height: 2rem;
     font-size: 1.4rem;
     padding-left: 7px;
+    background: white url(../images/search_icon.jpg) no-repeat 99% 50%;
 }
 .link {
     cursor: pointer;
@@ -515,27 +538,60 @@ textarea.custom-message {
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.3;
-    background-color: gray;
+    opacity: 0.6;
+    background-color: black;
     z-index: 100;
 }
 .dialog .dialog-body {
-    text-align: left;
-    border: 3px solid gray;
-    background: white;
-    padding: 10px 25px;
-}
-.dialog .dialog-body.center {
+    border: 15px solid white;
+    background: #e3e7e8;
+    padding: 0 40px;
     position: absolute;
     top: 50%;
     left: 50%;
     margin-top: -250px;
-    width: 600px;
-    margin-left: -325px;
+    width: 470px;
+    margin-left: -290px;
     z-index: 101;
 }
-.dialog h2 {
-    margin-top: 0px;
+.dialog .dialog-body h1 {
+    margin: 25px 0;
+    font-size: 3.4rem;
+    line-height: 34px;
+}
+.dialog .dialog-body p {
     text-align: left;
-    font-size: 2.0rem;
+    line-height: 23px;
+    margin: 23px 0;
+}
+.dialog .dialog-body input {
+    /*width: 436px;*/
+}
+::-webkit-input-placeholder {
+    font-style: italic;
+    color: #a1aebb;
+}
+::-moz-placeholder {
+    font-style: italic;
+    color: #a1aebb;
+}
+:-ms-input-placeholder {
+    font-style: italic;
+    color: #a1aebb;
+}
+.dialog .dialog-body .nav-buttons {
+    margin: 30px 0;
+}
+
+input[type=text] {
+    font-size: 1.6rem;
+    font-family: Arial;
+    width:100%;
+    height: 35px;
+    padding: 0 15px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #cbd3d9;
+    outline: none;
 }
