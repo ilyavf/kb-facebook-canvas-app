@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('Receiverstep1Ctrl', function ($scope, CurrentUser, $location, $upload, getAlbumId, GetPhotoUrlPromise, GetUser) {
+    .controller('Receiverstep1Ctrl', function ($scope, CurrentUser, $location, $upload, getAlbumId, GetPhotoUrlPromise, GetUser, SendRequest) {
         $scope.$emit('changeFlow', 'receiver');
         console.log('Receiver Step 1');
         $scope.isUploaderVisible = false;
@@ -104,6 +104,16 @@ angular.module('myappApp')
                                         if (uploadedFiles === $files.length) {
                                             console.log('ALL files uploaded now' + uploadedFiles);
                                             $scope.loading = "";
+
+                                            //send notification to the requester:
+                                            SendRequest({
+                                                sender: CurrentUser.info,
+                                                subject: pendingRequest.subject,
+                                                emailSubject: CurrentUser.info.name + " has just uploaded " + uploadedFiles + " photos of " + pendingRequest.subject.name,
+                                                recipients: [pendingRequest.sender]
+                                            }).then(function () {
+                                                console.log('[Receiverstep1Ctrl.sentPromise]: ', arguments);
+                                            });
                                         }
                                     });
                                 }

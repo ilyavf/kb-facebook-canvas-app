@@ -29,7 +29,8 @@ angular.module('myappApp')
                 } else {
                     requestObject.subject = {
                         name: $scope.subjectEvent.name,
-                        id: $scope.subjectEvent.name
+                        id: $scope.subjectEvent.name,
+                        type: $scope.subjectType
                     };
                 }
             }

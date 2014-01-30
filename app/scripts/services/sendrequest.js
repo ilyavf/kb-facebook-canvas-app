@@ -17,6 +17,11 @@ angular.module('myappApp')
             });
         };
 
+        /**
+         * Formats data for the platform api (fb email/notification)
+         * @param data
+         * @returns {*|string|undefined|string}
+         */
         function formatData (data) {
             var formatted = {
                 fromname: data.sender.name,
@@ -26,7 +31,9 @@ angular.module('myappApp')
                     email: user.username + '@facebook.com'
                 }; }),
                 subject: data.subject.name,
+                subject_type: data.subject.type,
                 message: data.message,
+                email_subject: data.emailSubject,
                 app_url: appUrl
             };
             console.log('[SendRequest.formatData] data, formatted: ', data, formatted);
