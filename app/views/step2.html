@@ -2,7 +2,7 @@
 
 <div ng-include="'views/nav.html'"></div>
 
-<div ng-if="subjectType == 'friend'">
+<div ng-show="subjectType == 'friend'">
 
     <h3><strong>Step 2:</strong> Type your name to find more photos of yourself <i>or</i>&nbsp; search for a friend that you'd like to get photos of</h3>
 
@@ -19,9 +19,9 @@
     </ul>
 </div>
 
-<div ng-if="subjectType == 'event'" ng-include="'views/step2_event.html'">Event</div>
+<div ng-show="subjectType == 'event'" ng-include="'views/step2_event.html'">Event</div>
 
 <div class="nav-buttons">
-    <a class="step2-back btn button button-large prev" href="#/step1">Back</a>
+    <a class="step2-back btn button button-large prev" href="#/">Back</a>
     <a class="select-people btn button button-large next" href="#/step3" ng-click="nextIfValid($event)">Select People to Ask</a>
 </div>

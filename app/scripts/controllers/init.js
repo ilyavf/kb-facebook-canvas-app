@@ -2,8 +2,16 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('InitCtrl', function ($scope, $location, CurrentUser) {
+    .controller('InitCtrl', function ($scope, $location, CurrentUser, requestObject) {
         console.log('InitCtrl');
+
+        if (CurrentUser.initialized) {
+            console.log('- already initialized');
+            requestObject.reset();
+            $location.path('/step1');
+            return;
+        }
+
         CurrentUser.initialized = true;
         $scope.message = 'Connecting to Facebook...';
 

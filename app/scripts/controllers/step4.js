@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('Step4Ctrl', function($scope, FriendObjects, FriendReceivers, requestObject) {
+    .controller('Step4Ctrl', function($scope, FriendObjects, requestObject) {
         console.log('Step 4');
         $scope.selectedSubject = requestObject.subject.name;
-        $scope.recipients = requestObject.recipients = _.where(FriendReceivers, {selected:true});
+        $scope.recipients = requestObject.recipients;
         $scope.remove = function (friend) {
             friend.selected = false;
             $scope.recipients.splice($scope.recipients.indexOf(friend), 1);

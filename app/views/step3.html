@@ -2,7 +2,7 @@
 
 <div ng-include="'views/nav.html'"></div>
 
-<p class="info">Based on their Facebook activity, here are the Facebook Friends who are most likely to have photos of <b>{{selectedSubject}}</b> <a href="#/step2">Change</a></p>
+<p class="info">Based on their Facebook activity, here are the Facebook Friends who are most likely to have photos of <b>{{selectedSubject}}</b> <a href="#/step2" ng-click="save()">Change</a></p>
 
 <h3 class="{{invalidInput}}"><strong>Step 3:</strong>Select the people you would like to ask for photos:</h3>
 
@@ -15,6 +15,6 @@
 
 
 <div class="nav-buttons">
-    <a class="step3-back btn button button-large prev" href="#/step2">Prev</a>
+    <a class="step3-back btn button button-large prev" href="#/step2" ng-click="save()">Prev</a>
     <a class="enter-message btn button button-large next" href="#/step4" ng-click="nextIfValid($event)">Enter Message</a>
 </div>

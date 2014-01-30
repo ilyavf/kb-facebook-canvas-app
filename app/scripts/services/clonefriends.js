@@ -16,6 +16,11 @@ angular.module('myappApp')
                     friendsCloned.push(_.clone(f));
                 });
             });
+            friendsCloned.reset = function () {
+                _.each(this, function (f) {
+                    f.selected = false;
+                })
+            }
             return friendsCloned;
         }
     });

@@ -49,7 +49,7 @@ angular.module('myappApp')
         //angular.forEach(pending, function (request) {});
         if (pending.length === 0) {
             console.log('WARNING: no pending requests found in ReceiverStep1');
-            $location.path('step1');
+            $location.path('/');
             return;
         }
 
