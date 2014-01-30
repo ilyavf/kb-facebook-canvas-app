@@ -25,7 +25,7 @@ angular.module('myappApp')
                     name: user.name,
                     email: user.username + '@facebook.com'
                 }; }),
-                object: data.object.name,
+                subject: data.subject.name,
                 message: data.message,
                 app_url: appUrl
             };

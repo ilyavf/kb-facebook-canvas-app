@@ -3,7 +3,7 @@
 angular.module('myappApp')
     .controller('Step4Ctrl', function($scope, FriendObjects, FriendReceivers, requestObject) {
         console.log('Step 4');
-        $scope.selectedObject = requestObject.object.name;
+        $scope.selectedSubject = requestObject.subject.name;
         $scope.recipients = requestObject.recipients = _.where(FriendReceivers, {selected:true});
         $scope.remove = function (friend) {
             friend.selected = false;

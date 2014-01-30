@@ -4,13 +4,13 @@ angular.module('myappApp')
     .controller('Step5Ctrl', function($scope, FriendObjects, FriendReceivers, GetUser, CurrentUser, SendRequest, requestObject) {
         console.log('Step 5');
 
-        $scope.selectedObject = _.reduce(FriendObjects, function(m, x){ return m +  (x.selected ? x.name : '')}, '');
+        $scope.selectedSubject = _.reduce(FriendObjects, function(m, x){ return m +  (x.selected ? x.name : '')}, '');
         $scope.recipients = _.map(requestObject.recipients, function (o) { return o.name;}).join(', ');
 
         $scope.isValid = true;
 
         var currentUserInfo = _.pick(CurrentUser.info, 'id', 'name', 'username'),
-            rObject = [requestObject.object]
+            rsubject = [requestObject.subject]
                 .map(function (i) {
                     return {
                         name: i.name,
@@ -27,7 +27,7 @@ angular.module('myappApp')
                     };
                 });
 
-        if (!rObject || recipients.length === 0) {
+        if (!rsubject || recipients.length === 0) {
             $scope.isValid = false;
             return;
         }
@@ -38,11 +38,11 @@ angular.module('myappApp')
             });
         }, 3000);
 
-        var request = CurrentUser.$fire.$child('sent').$child(rObject.id),
+        var request = CurrentUser.$fire.$child('sent').$child(rsubject.id),
             requestRecipients = request.$child('recipients');
 
         request.$child('date').$set(new Date().toJSON());
-        request.$child('object').$set(rObject);
+        request.$child('subject').$set(rsubject);
         request.$child('type').$set('friend');
 
         recipients
@@ -62,8 +62,8 @@ angular.module('myappApp')
             if (!user.info) {
                 user.child('info').set( {id: recipient.id, name: recipient.name, username: recipient.username} );
             }
-            user.child('received').child(rObject.id).set({
-                object: rObject,
+            user.child('received').child(rsubject.id).set({
+                subject: rsubject,
                 sender: currentUserInfo,
                 status: 'pending'
             });
@@ -72,7 +72,7 @@ angular.module('myappApp')
         // send emails:
         var sentPromise = SendRequest({
             sender: currentUserInfo,
-            object: rObject,
+            subject: rsubject,
             message: requestObject.message,
             recipients: recipients
         });

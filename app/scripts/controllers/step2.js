@@ -11,13 +11,13 @@ angular.module('myappApp')
                 f.selected = false;
             });
             friend.selected = true;
-            requestObject.object = friend;
+            requestObject.subject = friend;
         };
         $scope.$emit('wizardActive');
         $scope.nav1State = 'passed';
         $scope.nav2State = 'active';
         $scope.nextIfValid = function ($event) {
-            if (!requestObject.object) {
+            if (!requestObject.subject) {
                 $event.preventDefault();
                 $scope.invalidInput = 'animate-invalid-input';
             }

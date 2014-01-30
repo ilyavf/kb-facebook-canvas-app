@@ -3,7 +3,7 @@
 angular.module('myappApp')
     .service('requestObject', function () {
 
-        this.object;
+        this.subject;
 
         this.recipients;
 

@@ -27,10 +27,10 @@ angular.module('myappApp')
         $scope.countItems = function (obj) {
             return !!obj && _.keys(obj).length;
         };
-        $scope.sendReminder = function (user, object) {
-            console.log('[sendReminder]', user, object);
+        $scope.sendReminder = function (user, subject) {
+            console.log('[sendReminder]', user, subject);
             user.isLoading = 'loading';
-            SendReminder(user, object).then(function () {
+            SendReminder(user, subject).then(function () {
                 user.isReminderSent = true;
                 user.date = new Date().toJSON();
                 CurrentUser.$fire.$save()

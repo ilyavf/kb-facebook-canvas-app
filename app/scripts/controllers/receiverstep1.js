@@ -29,7 +29,7 @@ angular.module('myappApp')
 
         $scope.senderName = pendingRequest.sender.name;
         $scope.senderImgUrl = '//graph.facebook.com/' + pendingRequest.sender.username + '/picture';
-        $scope.objectName = pendingRequest.object.name;
+        $scope.subjectName = pendingRequest.subject.name;
 
 
         $scope.dialogPhotofinderIsHidden = true;
@@ -54,7 +54,7 @@ angular.module('myappApp')
         }
 
         var albumPromise = getAlbumId(pendingRequest),
-            correspondingSentRequest = GetUser(pendingRequest.sender.id).child('sent').child(pendingRequest.object.id).child('recipients').child(CurrentUser.info.id);
+            correspondingSentRequest = GetUser(pendingRequest.sender.id).child('sent').child(pendingRequest.subject.id).child('recipients').child(CurrentUser.info.id);
 
         albumPromise.then(function (albumData) {
             console.log('albumPromise resolved with:' + albumData.id, albumData);

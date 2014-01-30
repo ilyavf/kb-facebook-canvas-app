@@ -2,12 +2,12 @@
 
 angular.module('myappApp')
     .factory('SendReminder', function (SendRequest, CurrentUser) {
-        return function (user, object) {
-            console.log('[SendRequest]', user, object);
+        return function (user, subject) {
+            console.log('[SendRequest]', user, subject);
             // send emails:
             var sentPromise = SendRequest({
                 sender: CurrentUser.info,
-                object: object,
+                subject: subject,
                 message: "Reminder",
                 recipients: [user]
             });

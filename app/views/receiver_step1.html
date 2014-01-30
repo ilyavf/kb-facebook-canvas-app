@@ -2,7 +2,7 @@
 
     <div class="user-item">
         <img src="{{senderImgUrl}}" />
-        <strong>{{senderName}}</strong> sent you a request for photos of <strong>{{objectName}}</strong>.
+        <strong>{{senderName}}</strong> sent you a request for photos of <strong>{{subjectName}}</strong>.
 
     </div>
 
@@ -17,7 +17,7 @@
     <h3 ng-if="uploadedPhotos.length === 0" class="center accent1"><span class="{{loading}}">You haven't uploaded any photos</span></h3>
 
     <p ng-if="uploadedPhotos.length === 0" class="center">
-        Would you mind uploading photos you have of <strong>{{objectName}}</strong>
+        Would you mind uploading photos you have of <strong>{{subjectName}}</strong>
     </p>
 
     <div ng-show="!isUploaderVisible || uploadedPhotos.length === 0">
@@ -38,7 +38,7 @@
     <div ng-show="isUploaderVisible">
 
         <p ng-if="uploadedPhotos.length > 0" class="center">
-            When you are finished uploading all of your photos of <strong>{{objectName}}</strong> click <strong>Done</strong>
+            When you are finished uploading all of your photos of <strong>{{subjectName}}</strong> click <strong>Done</strong>
         </p>
 
         <input id="file-upload-input" class="hidden" type="file" ng-file-select="onFileSelect($files)" multiple="multiple" accept="image/jpeg,image/gif,image/png" />

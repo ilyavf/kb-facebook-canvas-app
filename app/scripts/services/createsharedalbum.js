@@ -4,11 +4,11 @@ angular.module('myappApp')
     .factory('CreateSharedAlbum', function () {
         return function (pendingRequest, callback) {
             var albumInfo, // = '263902453764861',
-                objectName = pendingRequest.object.name,
+                subjectName = pendingRequest.subject.name,
                 shareWithUserId = pendingRequest.sender.id,
                 shareWithUserName = pendingRequest.sender.name,
                 params = {
-                    name: 'Photos of ' + objectName + ' (shared with ' + shareWithUserName + ')',
+                    name: 'Photos of ' + subjectName + ' (shared with ' + shareWithUserName + ')',
                     privacy: {
                         'value': 'CUSTOM',
                         'allow': shareWithUserId
