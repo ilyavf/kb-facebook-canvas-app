@@ -520,10 +520,6 @@ ul.uploaded-photos {
     100% {color: #38383e;}
 }
 
-textarea.custom-message {
-    width: 100%;
-}
-
 .flow-receiver hr {
     margin-left: -39px;
     margin-right: -39px;
@@ -598,4 +594,61 @@ input[type=text] {
     box-sizing: border-box;
     border: 1px solid #cbd3d9;
     outline: none;
+}
+
+.email-message {
+    border: 1px solid #cad3da;
+    border-bottom: none;
+    background: white;
+}
+.email-message .message-block {
+    border-bottom: 1px solid #cad3da;
+    padding: 10px;
+}
+.email-message .label {
+    font-weight: normal;
+    font-family: kbMainFontBold;
+}
+.email-message .message-to .label {
+    float: left;
+}
+
+.email-message textarea {
+    width: 100%;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border: none;
+}
+.email-message .to-list {
+    margin: 0;
+    padding: 0 0 0 10px;
+    overflow: hidden;
+}
+.email-message .to-list .to-item {
+    display: inline-block;
+    float: left;
+    margin-right: 6px;
+    margin-bottom: 4px;
+    padding: 3px 7px 3px 8px;
+    background: #fafafa;
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+}
+.email-message .to-list .to-item .item-content {
+    margin-right: 10px;
+    font-size: 1.3rem;
+    color: #7e7f81;
+}
+.email-message .to-list .to-item .remove-recipient {
+    float: right;
+    color: #b3b3b3;
+    font-size: 1.1rem;
+    text-decoration: none;
+}
+.email-message .message-subject .label {
+    margin-right: 15px;
+}
+.email-message .message-subject .subject-content {
+    color: #7e7f81;
 }

@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('Step4Ctrl', function($scope, FriendObjects, requestObject) {
+    .controller('Step4Ctrl', function($scope, CurrentUser, FriendObjects, requestObject) {
         console.log('Step 4');
         $scope.selectedSubject = requestObject.subject.name;
+        $scope.emailSubject = CurrentUser.info.name + ' asked you to upload photos of ' + requestObject.subject.name;
         $scope.recipients = requestObject.recipients;
         $scope.remove = function (friend) {
             friend.selected = false;

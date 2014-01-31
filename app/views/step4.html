@@ -9,9 +9,21 @@
 </p>
 
 <h3><strong>Step 4:</strong> Send your friends a message asking them for photos of <b>{{selectedSubject}}</b></h3>
-<div>
-    <p>To: <i ng-repeat="friend in recipients">{{friend.name}} (<a class="remove-friend link" ng-click="remove(friend)">remove</a>); </i></p>
-    <p>Message: <textarea ng-model="message" class="custom-message"></textarea></p>
+
+<div class="email-message">
+    <div class="message-block message-to">
+        <div class="label">To:</div>
+        <ul class="to-list">
+            <li class="to-item" ng-repeat="friend in recipients">
+                <div class="remove-recipient link" ng-click="remove(friend)">x</div>
+                <span class="item-content">{{friend.name}}</span>
+            </li>
+        </ul>
+    </div>
+    <div class="message-block message-subject">
+        <span class="label">Subject: </span> <span class="subject-content">{{emailSubject}}</span>
+    </div>
+    <textarea ng-model="message" placeholder="Enter your message here (optional)" class="message-block message-body"></textarea>
 </div>
 
 
