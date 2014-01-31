@@ -6,7 +6,7 @@ angular.module('myappApp')
             console.log('- resetting subject in friends array');
             FriendObjects.reset();
         }
-        $scope.placeholderValue = requestObject.type === 'friend' ? 'Start searching' : 'e.g. "Trip to France", "The Eiffel Tower", "Christmas"';
+        $scope.placeholderValue = requestObject.type === 'friend' ? "Your name or friend's name" : 'e.g. "Trip to France", "The Eiffel Tower", "Christmas"';
         $scope.placeholder = $scope.placeholderValue;
         $scope.hidePlaceholder = function () {
             $scope.placeholder = '';

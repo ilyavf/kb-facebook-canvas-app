@@ -114,6 +114,9 @@ h3 strong, h3.accent1 {
 .clear {
     overflow: hidden;
 }
+.clear-floating {
+    clear: both;
+}
 .center {
     text-align: center;
 }
