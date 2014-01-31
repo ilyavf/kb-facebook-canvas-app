@@ -7,7 +7,7 @@
 <h3 class="{{invalidInput}}"><strong>Step 3:</strong>Select the people you would like to ask for photos:</h3>
 
 <input type="text" ng-model="friendNameQuery"
-       placeholder="Filter"/>
+       placeholder="{{placeholder}}" ng-focus="placeholder = ''" ng-blur="placeholder = 'Filter'"/>
 
 <ul class="friend-list">
     <li ng-repeat="friend in friends | matchedOrSelected:friendNameQuery" ng-click="friend.selected = !friend.selected; clearValidation();" class="{{friend.selected ? 'selected' : ''}}">

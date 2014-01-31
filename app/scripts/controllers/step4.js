@@ -14,6 +14,8 @@ angular.module('myappApp')
         $scope.saveMessage = function () {
             requestObject.message = $scope.message;
         };
+        $scope.placeholderValue = 'Enter your message here (optional)';
+        $scope.placeholder = $scope.placeholderValue;
         $scope.nav1State = 'passed';
         $scope.nav2State = 'passed';
         $scope.nav3State = 'passed';

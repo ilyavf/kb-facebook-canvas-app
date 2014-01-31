@@ -67,6 +67,12 @@ h1 {
 h1.header {
     text-align: right;
     margin: 30px 95px 20px;
+}
+.header .logo {
+    float: left;
+    display: inline-block;
+    width: 82px;
+    height: 82px;
     background: url('../images/logo-kooboodle.png') no-repeat ;
 }
 h2 {
@@ -115,6 +121,9 @@ h3 strong, h3.accent1 {
     text-align: center;
     margin: 20px 0 20px;
     line-height: 2.6rem;
+}
+.info a, .info a:visited, .info a:hover {
+    color: #60569f;
 }
 .info {
     background: #e5f0ea;
@@ -175,7 +184,7 @@ a.button-large, a.button-large:hover, a.button-large:active {
     text-decoration: none;
 }
 .buttons-container {
-    max-width: 385px;
+    max-width: 450px;
     margin: 20px auto;
 }
 .buttons-container.wide {
@@ -621,6 +630,7 @@ input[type=text] {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     border: none;
+    outline: none;
 }
 .email-message .to-list {
     margin: 0;

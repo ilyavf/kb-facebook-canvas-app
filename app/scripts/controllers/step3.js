@@ -11,6 +11,7 @@ angular.module('myappApp')
         //$scope.selectedObject = _.reduce(FriendObjects, function(m, x){ return m +  (x.selected ? x.name : '')}, '');
         $scope.selectedSubject = requestObject.subject.name;
         $scope.friends = FriendReceivers;
+        $scope.placeholder = 'Filter';
         $scope.nav1State = 'passed';
         $scope.nav2State = 'passed';
         $scope.nav3State = 'active';

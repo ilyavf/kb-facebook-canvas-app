@@ -4,7 +4,7 @@
 
 <!--<p style="text-decoration: line-through">Kooboodle will create a Facebook photo album named "Photos of {{selectedSubject}} (Kooboodle)". The album will only be visible to you and to the people who contributed photos to it.</p>-->
 <p class="info">
-    Once a friend uploads photos of <i>{{selectedSubject}}</i>, Kooboodle will store them in an album called "Photos of <i>{{selectedSubject}}</i> from <i>Example Sender Name</i> via Kooboodle".
+    Once a friend uploads photos of <strong>{{selectedSubject}}</strong>, Kooboodle will store them in an album called <strong>"Photos of {{selectedSubject}} from Sender Name via Kooboodle"</strong>.
     This album will only be visible to you, and the friend who uploaded the photos.
 </p>
 
@@ -23,7 +23,8 @@
     <div class="message-block message-subject">
         <span class="label">Subject: </span> <span class="subject-content">{{emailSubject}}</span>
     </div>
-    <textarea ng-model="message" placeholder="Enter your message here (optional)" class="message-block message-body"></textarea>
+    <textarea ng-model="message" class="message-block message-body"
+        placeholder="{{placeholder}}" ng-focus="placeholder = ''" ng-blur="placeholder = placeholderValue"></textarea>
 </div>
 
 

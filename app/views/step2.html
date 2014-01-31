@@ -8,7 +8,7 @@
 
     <div class="search">
         <input type="text" class="search-friend {{invalidInput}}" ng-model="friendNameQuery"
-            placeholder="Start searching"/>
+            placeholder="{{placeholder}}" ng-focus="hidePlaceholder()" ng-blur="showPlaceholder()"/>
     </div>
 
     <ul class="friend-list">
