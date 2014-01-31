@@ -608,9 +608,11 @@ input[type=text] {
 .email-message .label {
     font-weight: normal;
     font-family: kbMainFontBold;
+    font-size: 1.4rem;
 }
 .email-message .message-to .label {
     float: left;
+    line-height: 30px;
 }
 
 .email-message textarea {
@@ -645,10 +647,12 @@ input[type=text] {
     color: #b3b3b3;
     font-size: 1.1rem;
     text-decoration: none;
+    margin: -3px -3px 0 0;
 }
 .email-message .message-subject .label {
-    margin-right: 15px;
+    margin-right: 8px;
 }
 .email-message .message-subject .subject-content {
     color: #7e7f81;
+    font-size: 1.6rem;
 }
