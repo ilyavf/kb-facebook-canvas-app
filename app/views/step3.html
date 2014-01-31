@@ -6,8 +6,11 @@
 
 <h3 class="{{invalidInput}}"><strong>Step 3:</strong>Select the people you would like to ask for photos:</h3>
 
+<input type="text" ng-model="friendNameQuery"
+       placeholder="Filter"/>
+
 <ul class="friend-list">
-    <li ng-repeat="friend in friends" ng-click="friend.selected = !friend.selected; clearValidation();" class="{{friend.selected ? 'selected' : ''}}">
+    <li ng-repeat="friend in friends | matchedOrSelected:friendNameQuery" ng-click="friend.selected = !friend.selected; clearValidation();" class="{{friend.selected ? 'selected' : ''}}">
         <img src="//graph.facebook.com/{{friend.id}}/picture" />
         <span>{{friend.name}}</span>
     </li>
