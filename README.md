@@ -5,7 +5,7 @@ Facebook Canvas Application-Test User Experience of Photo Exchange
 
 The project was created using yeoman toolset (http://yeoman.io/).
 Tools used:
-- bower (dependency menager)
+- bower (dependency manager)
 - compass (SASS compiler)
 - grunt (build tool)
 
