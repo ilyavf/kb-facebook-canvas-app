@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('Receiverstep1Ctrl', function ($scope, CurrentUser, $location, $upload, getAlbumId, GetPhotoUrlPromise, GetUser, SendRequest) {
+    .controller('Receiverstep1Ctrl', function ($scope, $routeParams, CurrentUser, $location, $upload, getAlbumId, GetPhotoUrlPromise, GetUser, SendRequest) {
         $scope.$emit('changeFlow', 'receiver');
-        console.log('Receiver Step 1');
+        console.log('[Receiverstep1Ctrl]:' + $routeParams['requestId']);
         $scope.isUploaderVisible = false;
         $scope.$emit('wizardActive');
         $scope.openUploader = function () {
@@ -19,7 +19,11 @@ angular.module('myappApp')
         };
 
         var pending = _.where(CurrentUser.$fire.received, {status: 'pending'}),
-            pendingRequest = pending[0];
+            pendingRequest = $routeParams['requestId'] && _.filter(CurrentUser.$fire.received, function (o) { return o.subject.id === $routeParams['requestId']})[0]
+                || pending[pending.length - 1];
+
+        console.log('- # of pending requests: ' + pending.length);
+        console.log('- processing request: ' + pendingRequest.subject.name);
 
         if (!pendingRequest) {
             console.log('[Receiverstep1Ctrl] no pending requests found. Redirecting to init step...');
@@ -119,7 +123,6 @@ angular.module('myappApp')
                                 }
 
                                 // save flag for receiver:
-                                pendingRequest.status = 'completed';
                                 pendingRequest.status = 'completed';
                                 CurrentUser.$fire.$save();
 

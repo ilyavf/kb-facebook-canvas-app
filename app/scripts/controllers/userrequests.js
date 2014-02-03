@@ -3,10 +3,11 @@
 angular.module('myappApp')
     .controller('UserrequestsCtrl', function($scope, $location, CurrentUser, SendReminder) {
         console.log('[UserrequestsCtrl]');
+        window.$location = $location;
 
         if (!CurrentUser.initialized && $location.path() !== '/') {
             console.log('[UserrequestsCtrl] not initialized yet. Redirecting to init step...');
-            $location.path('/');
+            $location.path('/init' + $location.path());
         }
 
         $scope.currentRequestIndex = 0;

@@ -14,6 +14,14 @@ angular.module('myappApp', [
                 controller: 'InitCtrl',
                 templateUrl:'views/init.html'
             })
+            .when('/init/:ctrl/:action', {
+                controller: 'InitCtrl',
+                templateUrl:'views/init.html'
+            })
+            .when('/init/:ctrl*', {
+                controller: 'InitCtrl',
+                templateUrl:'views/init.html'
+            })
             .when('/step1', {
                 controller: 'Step1Ctrl',
                 templateUrl:'views/step1.html'
@@ -34,7 +42,7 @@ angular.module('myappApp', [
                 controller: 'Step5Ctrl',
                 templateUrl:'views/step_final.html'
             })
-            .when('/receiver/step1', {
+            .when('/receiver/:requestId', {
                 controller: 'Receiverstep1Ctrl',
                 templateUrl:'views/receiver_step1.html'
             });

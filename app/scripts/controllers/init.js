@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('InitCtrl', function ($scope, $location, CurrentUser, requestObject) {
+    .controller('InitCtrl', function ($scope, $routeParams, $location, CurrentUser, requestObject) {
         console.log('InitCtrl');
 
         if (CurrentUser.initialized) {
@@ -36,13 +36,19 @@ angular.module('myappApp')
 
         function navigate (data) {
             var pending = data && data.received && _.where(data.received, {status: 'pending'});
-            console.log('[InitCtrl.navigate]: data, pending::', data, pending);
+            console.log('[InitCtrl.navigate]: data, pending:: ' + $routeParams.ctrl + ' ' + $routeParams.action, data, pending);
 
             if (pending && pending.length > 0) {
                 console.log('- receiver flow');
                 //require(['kb_ang_step_receiver'], function () {
-                //    console.log('... loaded. Go to Receiver Step 1.');
-                $location.path('receiver/step1');
+                console.log('- Go to Receiver');
+                if ($routeParams.ctrl === 'receiver' && $routeParams.action) {
+                    console.log('- /receiver/' + $routeParams.action);
+                    $location.path('/receiver/' + $routeParams.action);
+                } else {
+                    console.log('- /receiver/last');
+                    $location.path('/receiver/last');
+                }
                 //});
             } else {
                 console.log('- regular flow. Loading...');
