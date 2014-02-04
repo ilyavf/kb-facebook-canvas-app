@@ -25,6 +25,7 @@ angular.module('myappApp')
             });
             friend.selected = true;
             requestObject.subject = friend;
+            requestObject.subject.type = 'friend';
         };
         $scope.$emit('wizardActive');
         $scope.nav1State = 'passed';
