@@ -15,7 +15,7 @@ angular.module('myappApp')
                     return {
                         name: i.name,
                         id: i.id,
-                        type: 'friend'
+                        type: i.type
                     }
                 })[0],
             recipients = requestObject.recipients
@@ -43,7 +43,7 @@ angular.module('myappApp')
 
         request.$child('date').$set(new Date().toJSON());
         request.$child('subject').$set(rsubject);
-        request.$child('type').$set('friend');
+        request.$child('type').$set(rsubject.type);
 
         recipients
             .map(function (i) { return {
@@ -74,6 +74,7 @@ angular.module('myappApp')
             sender: currentUserInfo,
             subject: rsubject,
             message: requestObject.message,
+            type: 'request',
             recipients: recipients
         });
 

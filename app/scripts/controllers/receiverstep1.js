@@ -113,8 +113,9 @@ angular.module('myappApp')
                                             SendRequest({
                                                 sender: CurrentUser.info,
                                                 subject: pendingRequest.subject,
-                                                emailSubject: CurrentUser.info.name + " uploaded " + uploadedFiles + " photo" + (uploadedFiles > 1 ? 's' : '') + " of " + pendingRequest.subject.name,
-                                                recipients: [pendingRequest.sender]
+                                                photos: uploadedFiles,
+                                                recipients: [pendingRequest.sender],
+                                                type: 'response'
                                             }).then(function () {
                                                 console.log('[Receiverstep1Ctrl.sentPromise]: ', arguments);
                                             });

@@ -35,9 +35,10 @@ angular.module('myappApp')
                 if (!$scope.subjectEvent.name.trim()) {
                     requestObject.subject = null;
                 } else {
+                    var eventName = $scope.subjectEvent.name.replace(/[^A-Za-z0-9_\-\s]/g,'')
                     requestObject.subject = {
-                        name: $scope.subjectEvent.name,
-                        id: $scope.subjectEvent.name,
+                        name: eventName,
+                        id: eventName.replace(/\s/g, '+'),
                         type: $scope.subjectType
                     };
                 }

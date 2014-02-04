@@ -24,16 +24,16 @@ angular.module('myappApp')
          */
         function formatData (data) {
             var formatted = {
-                fromname: data.sender.name,
+                sender: data.sender,
                 contacts: data.recipients.map(function (user) { return {
                     id: user.id,
                     name: user.name,
                     email: user.username + '@facebook.com'
                 }; }),
-                subject: data.subject.name,
-                subject_type: data.subject.type,
+                subject: data.subject,
+                type: data.type,                     // { 'request' | 'response' }
                 message: data.message,
-                email_subject: data.emailSubject,
+                photos: data.photos,
                 app_url: appUrl
             };
             console.log('[SendRequest.formatData] data, formatted: ', data, formatted);

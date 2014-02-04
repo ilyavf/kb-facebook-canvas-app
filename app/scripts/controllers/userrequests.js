@@ -4,10 +4,14 @@ angular.module('myappApp')
     .controller('UserrequestsCtrl', function($scope, $location, CurrentUser, SendReminder) {
         console.log('[UserrequestsCtrl]');
         window.$location = $location;
+        var requestMatch = location.search.match(/requestsubject=([\w\s\-\+'",\.;]*)/);
 
-        if (!CurrentUser.initialized && $location.path() !== '/') {
-            console.log('[UserrequestsCtrl] not initialized yet. Redirecting to init step...');
-            $location.path('/init' + $location.path());
+        if (!CurrentUser.initialized && (requestMatch || $location.path() !== '/' && $location.path() !== '')) {
+            console.log('[UserrequestsCtrl] not initialized yet. Redirecting to init step...' + $location.path());
+            var requestSubject = requestMatch && requestMatch[1],
+                path = requestSubject ? '/receiver/' +  requestSubject : $location.path();
+
+            $location.path('/init' + path);
         }
 
         $scope.currentRequestIndex = 0;
@@ -34,7 +38,7 @@ angular.module('myappApp')
             SendReminder(user, subject).then(function () {
                 user.isReminderSent = true;
                 user.date = new Date().toJSON();
-                CurrentUser.$fire.$save()
+                CurrentUser.$fire.$save();
                 user.isLoading = '';
             });
         };
@@ -42,9 +46,9 @@ angular.module('myappApp')
             return user.status === 'pending'
                 && user.isReminderSent !== true
                 && (!user.date || new Date(user.date).toDateString() != new Date().toDateString());
-        }
+        };
 
-        CurrentUser.loginStatus.then(function (loginStatus) {
+        CurrentUser.loginStatus.then(function () {
             $scope.userdata = CurrentUser.$fire;
         });
 
