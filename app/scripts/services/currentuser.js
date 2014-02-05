@@ -56,7 +56,7 @@ angular.module('myappApp')
             user.info.name = response.name;
             user.info.username = response.username;
             user.info.relationship_status = response.relationship_status || '';
-            user.info.spause = response.significant_other || '';
+            user.info.spouse = response.significant_other || '';
             user.$fire = $firebase(GetUser(user.info.id));
             user.$fire.$on('loaded', function (data) {
                 console.log('[fb_getMyInfo] firebase user data loaded: ', data);

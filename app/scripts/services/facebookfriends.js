@@ -20,16 +20,16 @@ angular.module('myappApp')
             } else {
                 var allFriendsRaw = _.where(response.data, {name: "all_friends"})[0].fql_result_set,
                     familyRaw = _.where(response.data, {name: "family_members"})[0].fql_result_set,
-                    spause = CurrentUser.info.spause,
+                    spouse = CurrentUser.info.spouse,
                     friends = ExtendFacebookFriends(allFriendsRaw);
 
                 _.each(familyRaw, function(f) {
                     var friend = _.where(friends, {id: f.uid})[0];
                     if (friend) friend.relationship = f.relationship;
                 });
-                if (spause) {
-                    var friend = _.where(friends, {id: spause})[0];
-                    if (friend) friend.relationship = 'spause';
+                if (spouse) {
+                    var friend = _.where(friends, {id: spouse})[0];
+                    if (friend) friend.relationship = 'spouse';
                 }
                 console.log('All friends: ' + friends.length);
                 deffered.resolve(friends);
