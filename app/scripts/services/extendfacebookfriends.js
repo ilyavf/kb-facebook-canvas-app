@@ -12,7 +12,8 @@ angular.module('myappApp')
                         id: f.uid || f.id,
                         name: f.name,
                         username: f.username,
-                        selected: false
+                        selected: false,
+                        relationship: f.relationship || 'friend'
                     };
                 });
         }

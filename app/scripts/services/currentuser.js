@@ -10,16 +10,19 @@ angular.module('myappApp')
             info: {
                 id: null,
                 name: null,
-                username: null
+                username: null,
+                relationship: 'myself'
             },
             $fire: null
             //$fire: $firebase(GetUser(userId))
             //data: GetUser(userId)
         };
 
+    console.log('FB init...');
     FB.init({
         appId: CONFIG.APP_ID
     });
+    console.log('FB getLoginStatus...');
     FB.getLoginStatus(function(response) {
         console.log(response);
         if (response && response.status === "connected") {
@@ -47,11 +50,13 @@ angular.module('myappApp')
         }, {scope: 'user_friends,user_photos,publish_stream'});
     }
     function fb_getMyInfo (user) {
-        FB.api('/me?fields=name,username', function (response) {
+        FB.api('/me?fields=name,username,relationship_status,significant_other', function (response) {
             console.log('[fb_getMyInfo]: FB.api/me - Current user: ' + response.name + '.', response);
             user.info.id = response.id;
             user.info.name = response.name;
             user.info.username = response.username;
+            user.info.relationship_status = response.relationship_status || '';
+            user.info.spause = response.significant_other || '';
             user.$fire = $firebase(GetUser(user.info.id));
             user.$fire.$on('loaded', function (data) {
                 console.log('[fb_getMyInfo] firebase user data loaded: ', data);

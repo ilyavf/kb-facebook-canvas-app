@@ -11,19 +11,22 @@ angular.module('myappApp')
 
         var currentUserInfo = _.pick(CurrentUser.info, 'id', 'name', 'username'),
             rsubject = [requestObject.subject]
-                .map(function (i) {
-                    return {
-                        name: i.name,
-                        id: i.id,
-                        type: i.type
-                    }
+                .map(function (subject) {
+                    var mapped = {
+                        name: subject.name,
+                        id: subject.id,
+                        type: subject.type
+                    };
+                    if (subject.relationship) mapped.relationship = subject.relationship;
+                    return mapped;
                 })[0],
             recipients = requestObject.recipients
                 .map(function (user) {
                     return {
                         id: user.id,
                         name: user.name,
-                        username: user.username
+                        username: user.username,
+                        relationship: user.relationship
                     };
                 });
 
@@ -50,6 +53,7 @@ angular.module('myappApp')
                 id: i.id,
                 name: i.name,
                 username: i.username,
+                relationship: i.relationship,
                 status: 'pending',
                 date: new Date().toJSON()
             };})
