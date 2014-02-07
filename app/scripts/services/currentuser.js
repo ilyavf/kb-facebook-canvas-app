@@ -53,8 +53,8 @@ angular.module('myappApp')
         FB.api('/me?fields=name,username,relationship_status,significant_other', function (response) {
             console.log('[fb_getMyInfo]: FB.api/me - Current user: ' + response.name + '.', response);
             user.info.id = response.id;
-            user.info.name = response.name;
-            user.info.username = response.username;
+            user.info.name = response.name || '';
+            user.info.username = response.username || '';
             user.info.relationship_status = response.relationship_status || '';
             user.info.spouse = response.significant_other || '';
             user.$fire = $firebase(GetUser(user.info.id));
