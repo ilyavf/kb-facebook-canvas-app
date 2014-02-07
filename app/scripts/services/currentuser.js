@@ -3,7 +3,8 @@
 angular.module('myappApp')
 .factory('CurrentUser', function ($q, $rootScope, GetUser, $firebase) {
 
-    var loginStatusDeferred = $q.defer(),
+    var fbAppId = '203880539796100',
+        loginStatusDeferred = $q.defer(),
         user = {
             initialized: false,
             loginStatus: loginStatusDeferred.promise,
@@ -20,7 +21,7 @@ angular.module('myappApp')
 
     console.log('FB init...');
     FB.init({
-        appId: CONFIG.APP_ID
+        appId: fbAppId
     });
     console.log('FB getLoginStatus...');
     FB.getLoginStatus(function(response) {
