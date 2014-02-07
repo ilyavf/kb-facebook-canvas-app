@@ -19,7 +19,7 @@ angular.module('myappApp')
         };
 
         var pending = _.where(CurrentUser.$fire.received, {status: 'pending'}),
-            pendingRequest = $routeParams['requestId'] && _.filter(CurrentUser.$fire.received, function (o) { return o.subject.id === $routeParams['requestId']})[0]
+            pendingRequest = $routeParams['requestId'] && _.filter(CurrentUser.$fire.received, function (o) { return o.subject.id == $routeParams['requestId']})[0]
                 || pending[pending.length - 1];
 
         console.log('- # of pending requests: ' + pending.length);
@@ -124,8 +124,11 @@ angular.module('myappApp')
                                 }
 
                                 // save flag for receiver:
-                                pendingRequest.status = 'completed';
-                                CurrentUser.$fire.$save();
+                                //pendingRequest.status = 'completed';
+                                // ilya: this causes error "WebSocket is already in CLOSING or CLOSED state."
+                                //CurrentUser.$fire.$save();
+
+                                CurrentUser.$fire.$child('received').$child(pendingRequest.subject.id).$child('status').$set('completed');
 
                                 // save flag for sender:
                                 correspondingSentRequest.child('status').set('completed');
