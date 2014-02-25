@@ -36,7 +36,7 @@ angular.module('myappApp')
             FB.ui({
                 method: 'send',
                 to: userId,
-                link: 'https://apps.facebook.com/kooboodle/?requestsubject' + requestObject.subject.id
+                link: 'https://apps.facebook.com/kooboodle/?requestsubject=' + requestObject.subject.id
             });
         };
 
