@@ -32,18 +32,7 @@ angular.module('myappApp')
                 }).then(function (response) {
                     var data = JSON.parse(response.data.replace(/([^\}]*)$/g, ''));
 
-                    // mark recipients as
-                    _.each(requestData.recipients, function (user) {
-                        user.notification_sent =  _.findWhere(data.notification_sent, {id: user.id}) ? true : false;
-                        user.isFbKooboodleUser =  user.notification_sent;
-                    });
-
-                    console.log('Kooboodle users: ' + requestData.recipients
-                        .filter(function(u){ return u.isFbKooboodleUser;})
-                        .map(function(u){ return u.name;}).join(', ') + '');
-                    console.log('NON Kooboodle users: ' + requestData.recipients
-                        .filter(function(u){ return !u.isFbKooboodleUser;})
-                        .map(function(u){ return u.name;}).join(', ') + '');
+                    $scope.markUsers(requestObject.recipients, data.notification_sent);
 
                     //TODO: convert to a promise:
                     SaveRequestData(requestData);
@@ -51,11 +40,14 @@ angular.module('myappApp')
                     console.log('[SendRequest promise resolved]', arguments);
 
                     $location.path('/step4');
-                }, function (data) {
+                }, function (response) {
                     console.log('*** ERROR *** failed to send FB requests', arguments);
                     $window.alert("System Error\n\nThere was an error while trying to send requests to Facebook."
-                        + "\n\nStatus: " + data.status
-                        + "\nMsg: " + data.data);
+                        + "\n\nStatus: " + response.status
+                        + "\nMsg: " + response.data);
+
+                    //$scope.markUsers(requestObject.recipients, [{id: '100004353247811'}]);
+                    //$location.path('/step4');
                 });
             }
         };
@@ -65,4 +57,20 @@ angular.module('myappApp')
         $scope.save = function () {
             requestObject.recipients = _.where(FriendReceivers, {selected:true});
         };
+
+        $scope.markUsers = function (recipients, notification_sent) {
+
+            // mark recipients as KB/non-KB:
+            _.each(recipients, function (user) {
+                user.notification_sent =  _.findWhere(notification_sent, {id: user.id}) ? true : false;
+                user.isFbKooboodleUser =  user.notification_sent;
+            });
+
+            console.log('Kooboodle users: ' + recipients
+                .filter(function(u){ return u.isFbKooboodleUser;})
+                .map(function(u){ return u.name;}).join(', ') + '');
+            console.log('NON Kooboodle users: ' + recipients
+                .filter(function(u){ return !u.isFbKooboodleUser;})
+                .map(function(u){ return u.name;}).join(', ') + '');
+        }
     });

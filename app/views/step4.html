@@ -8,29 +8,37 @@
     This album will only be visible to you, and the friend who uploaded the photos.
 </p>
 
-<h3><strong>Step 4:</strong> Send your friends a message asking them for photos of <b>{{selectedSubject}}</b></h3>
+<div ng-if="nonKbUsers.length > 0">
+    <h3>
+        <strong>Step 4:</strong>
+        Invite your friend{{nonKbUsers.length > 1 ? 's' : ''}} to Kooboodle and ask {{nonKbUsers.length > 1 ? 'them' : 'him'}}
+        to send you photos of <b>{{selectedSubject}}</b>
+    </h3>
 
-<div class="email-message">
-    <div class="message-block message-to">
-        <div class="label">To:</div>
-        <ul class="to-list">
-            <li class="to-item" ng-repeat="friend in recipients">
-                <div class="remove-recipient link" ng-click="remove(friend)">x</div>
-                <span class="item-content">{{friend.name}}</span>
-            </li>
-        </ul>
-        <div class="clear-floating"></div>
-    </div>
-    <div class="message-block message-subject">
-        <span class="label">Subject: </span> <span class="subject-content">{{emailSubject}}</span>
-    </div>
-    <textarea ng-model="message" class="message-block message-body"
-        placeholder="{{placeholder}}" ng-focus="placeholder = ''" ng-blur="placeholder = placeholderValue"></textarea>
+    <ul class="friend-list">
+        <li ng-repeat="friend in nonKbUsers | matchedOrSelected:friendNameQuery" ng-click="sendMessage(friend.id);" class="{{friend.msgSent ? 'msg-sent' : ''}}">
+            <img src="//graph.facebook.com/{{friend.id}}/picture" />
+            <span>{{friend.name}}</span>
+        </li>
+    </ul>
+
+    <p>
+        Your friend{{kbUsers.length > 1 ? 's' : ''}} <strong>{{kbUsersString}}</strong> already use{{kbUsers.length == 1 ? 's' : ''}} Kooboodle.
+        We automatically sent {{kbUsers.length > 1 ? 'them' : 'him'}} a request for photos.
+        When a photo is uploaded you will receive a Facebook Notification.
+    </p>
 </div>
 
+<div ng-if="nonKbUsers.length == 0">
+    <h3>
+        <strong>Step 4:</strong>
+        We sent a request for photos to <b>{{kbUsersString}}</b>.
+        When a photo is uploaded you will receive a Facebook Notification.
+    </h3>
+</div>
 
 
 <div class="nav-buttons">
     <a class="step4-back btn button button-large prev" ng-click="saveMessage();" href="#/step3">Back</a>
-    <a class="send-message btn button button-large next" ng-click="saveMessage();" href="#/step5">Send message</a>
+    <a class="send-message btn button button-large next {{done ? '' : 'disabled'}}" ng-click="nextIfValid($event);" href="#/step5">Done</a>
 </div>

@@ -145,6 +145,10 @@ hr {
 .button {
     cursor: pointer;
 }
+.button.disabled {
+    opacity: 0.3;
+    cursor: default;
+}
 .button-large {
     display: inline-block;
     border-radius: 5px;
@@ -248,6 +252,10 @@ a.button-large, a.button-large:hover, a.button-large:active {
     font-size: 1.3rem;
 }
 .friend-list li.selected {
+    background: #e8ebef url(../images/icon-check.png) no-repeat 95% 50%;
+    font-weight: bold;
+}
+.friend-list li.msg-sent {
     background: #e8ebef url(../images/icon-check.png) no-repeat 95% 50%;
     font-weight: bold;
 }
