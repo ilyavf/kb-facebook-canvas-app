@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('Step5Ctrl', function($scope, PrepareRequestData, SaveRequestData, SendRequest) {
+    .controller('Step5Ctrl', function($scope) {
         console.log('Step 5');
 
         var requestData = PrepareRequestData();
@@ -16,20 +16,7 @@ angular.module('myappApp')
 
         $scope.isValid = true;
 
-        SaveRequestData(requestData);
-
-        // send emails:
-        SendRequest({
-            sender: requestData.currentUserInfo,
-            subject: requestData.rsubject,
-            //message: requestObject.message,
-            type: 'request',
-            recipients: requestData.recipients
-        })
-        .then(function () {
-            console.log('[Step5.SendRequest]: promise resolved', arguments);
-            $scope.$apply(function () {
-                $scope.$emit('wizardInactive');
-            });
+        $scope.$apply(function () {
+            $scope.$emit('wizardInactive');
         });
     });
