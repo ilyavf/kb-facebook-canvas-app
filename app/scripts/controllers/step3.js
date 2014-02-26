@@ -31,6 +31,12 @@ angular.module('myappApp')
             } else {
                 var requestData = PrepareRequestData();
 
+                if (requestData.recipients.length === 0) {
+                    console.log('- all requests already sent');
+                    $location.path('/step4');
+                    return;
+                }
+
                 $scope.nextBtnLoading = true;
 
                 // send FB notifications/emails:
