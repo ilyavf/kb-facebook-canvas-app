@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('Step4Ctrl', function($scope, requestObject) {
+    .controller('Step4Ctrl', function($scope, requestObject, FbServices) {
         console.log('Step 4');
 
         $scope.kbUsers = requestObject.recipients.filter(function(u){ return u.isFbKooboodleUser; });
@@ -28,15 +28,11 @@ angular.module('myappApp')
                 return;
             }
 
-            user.msgSent = true;
-
-            $scope.done = true;
-
-            //TODO: move to a separate service:
-            FB.ui({
-                method: 'send',
-                to: userId,
-                link: 'https://apps.facebook.com/kooboodle/?requestsubject=' + requestObject.subject.id
+            FbServices.requestMsg(userId, requestObject.subject.id).then(function (result) {
+                if (result.status === 'success') {
+                    user.msgSent = true;
+                    $scope.done = true;
+                }
             });
         };
 

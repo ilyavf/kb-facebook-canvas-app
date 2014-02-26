@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('UserrequestsCtrl', function($scope, $location, CurrentUser, SendReminder) {
+    .controller('UserrequestsCtrl', function($scope, $location, CurrentUser, SendReminder, FbServices) {
         console.log('[UserrequestsCtrl]');
         window.$location = $location;
         var requestMatch = location.search.match(/requestsubject=([\w\s\-\+'",\.;]*)/);
@@ -35,11 +35,24 @@ angular.module('myappApp')
         $scope.sendReminder = function (user, subject) {
             console.log('[sendReminder]', user, subject);
             user.isLoading = 'loading';
-            SendReminder(user, subject).then(function () {
-                user.isReminderSent = true;
-                user.date = new Date().toJSON();
-                CurrentUser.$fire.$save();
-                user.isLoading = '';
+            SendReminder(user, subject).then(function (response) {
+                var data = JSON.parse(response.data.replace(/([^\}]*)$/g, ''));
+                // send FB dialog msg if app notification failed:
+                if (data.notification_sent.length === 0) {
+                    FbServices.requestMsg(user.id, subject.id).then(function (result) {
+                        if (result.status === 'success') {
+                            user.isReminderSent = true;
+                            user.date = new Date().toJSON();
+                            CurrentUser.$fire.$save();
+                        }
+                        user.isLoading = '';
+                    });
+                } else {
+                    user.isReminderSent = true;
+                    user.date = new Date().toJSON();
+                    CurrentUser.$fire.$save();
+                    user.isLoading = '';
+                }
             });
         };
         $scope.isReminderVisible = function (user) {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('Step5Ctrl', function($scope, requestObject) {
+    .controller('Step5Ctrl', function($scope, requestObject, $timeout) {
         console.log('Step 5');
 
         $scope.selectedSubject = requestObject.subject.name;
@@ -9,7 +9,7 @@ angular.module('myappApp')
 
         $scope.isValid = true;
 
-        $scope.$apply(function () {
+        $timeout(function () {
             $scope.$emit('wizardInactive');
-        });
+        }, 3000);
     });
