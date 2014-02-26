@@ -11,7 +11,7 @@
 }
 body {
     background-color: #e8edf2;
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     color: #38383e;
 }*/
 strong, b, .strong {
@@ -121,9 +121,9 @@ h3 strong, h3.accent1 {
     text-align: center;
 }
 .info-block {
-    text-align: center;
     margin: 20px 0 20px;
     line-height: 2.6rem;
+    font-size: 1.6rem;
 }
 .info a, .info a:visited, .info a:hover {
     color: #60569f;
@@ -131,7 +131,7 @@ h3 strong, h3.accent1 {
 .info {
     background: #e5f0ea;
     border: 1px solid #c8dcd3;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     padding: 20px;
     color: #576c63;
 }
@@ -255,8 +255,12 @@ a.button-large, a.button-large:hover, a.button-large:active {
     background: #e8ebef url(../images/icon-check.png) no-repeat 95% 50%;
     font-weight: bold;
 }
+.friend-list li.msg-send {
+    background: white url(../images/icon-send.png) no-repeat 95% 50%;
+    cursor: pointer;
+}
 .friend-list li.msg-sent {
-    background: #e8ebef url(../images/icon-check.png) no-repeat 95% 50%;
+    background: #e8ebef url(../images/icon-sent.png) no-repeat 95% 50%;
     font-weight: bold;
 }
 .search {
@@ -352,21 +356,20 @@ a.button-large, a.button-large:hover, a.button-large:active {
     list-style-type: none;
     margin: 0;
 }
-.request-list > li > div {
+.request-list .title {
+    font-size: 1.6rem;
     color: #685f9a;
+    padding-left: 20px;
+    border-bottom: 1px solid #d8d9db;
+    line-height: 40px;
 }
 .request-list li {
     background-color: white;
     border: 1px solid #d8d9db;
 }
-.request-list > li > div {
-    padding-left: 20px;
-    border-bottom: 1px solid #d8d9db;
-    line-height: 40px;
-}
 .request-list .user-list {
-    max-height: 155px;
-    overflow: auto;
+    /*max-height: 155px;*/
+    /*overflow: auto;*/
 }
 .request-list .user-list li {
     font-size: 1.2rem;
@@ -414,6 +417,7 @@ ul.request-nav {
     height: 45px;
     background: url(../images/steps-bg.png) no-repeat 66px 0;
     margin: 0 auto;
+    font-size: 1.6rem;
 }
 .request-nav li.nav-item {
     width: 176px;

@@ -16,7 +16,7 @@
     </h3>
 
     <ul class="friend-list">
-        <li ng-repeat="friend in nonKbUsers | matchedOrSelected:friendNameQuery" ng-click="sendMessage(friend.id);" class="{{friend.msgSent ? 'msg-sent' : ''}}">
+        <li ng-repeat="friend in nonKbUsers | matchedOrSelected:friendNameQuery" ng-click="sendMessage(friend.id);" class="{{friend.msgSent ? 'msg-sent' : 'msg-send'}}">
             <img src="//graph.facebook.com/{{friend.id}}/picture" />
             <span>{{friend.name}}</span>
         </li>

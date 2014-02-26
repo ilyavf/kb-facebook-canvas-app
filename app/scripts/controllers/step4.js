@@ -12,7 +12,7 @@ angular.module('myappApp')
 
         $scope.selectedSubject = requestObject.subject.name;
 
-        $scope.done = $scope.nonKbUsers.length === 0 ? true : false;
+        $scope.done = $scope.nonKbUsers.length > 0 && $scope.nonKbUsers.filter(function(u){ return u.msgSent;}).length === 0 ? false : true;
 
         $scope.nextIfValid = function ($event) {
             if (!$scope.done) {

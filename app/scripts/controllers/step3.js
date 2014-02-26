@@ -46,8 +46,8 @@ angular.module('myappApp')
                         + "\n\nStatus: " + response.status
                         + "\nMsg: " + response.data);
 
-                    //$scope.markUsers(requestObject.recipients, [{id: '100004353247811'}]);
-                    //$location.path('/step4');
+                    $scope.markUsers(requestObject.recipients, [{id: '100004353247811'}]);
+                    $location.path('/step4');
                 });
             }
         };
