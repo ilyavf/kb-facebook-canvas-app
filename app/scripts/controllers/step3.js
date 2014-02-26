@@ -15,13 +15,23 @@ angular.module('myappApp')
         $scope.nav1State = 'passed';
         $scope.nav2State = 'passed';
         $scope.nav3State = 'active';
+        $scope.nextBtnLoading = false;
+
         $scope.nextIfValid = function ($event) {
+            if ($scope.nextBtnLoading) {
+                $event.preventDefault();
+                console.log('... in process ...');
+                return false;
+            }
+
             $scope.save();
             if (requestObject.recipients.length === 0) {
                 $event.preventDefault();
                 $scope.invalidInput = 'animate-invalid-text';
             } else {
                 var requestData = PrepareRequestData();
+
+                $scope.nextBtnLoading = true;
 
                 // send FB notifications/emails:
                 SendRequest({
@@ -46,8 +56,10 @@ angular.module('myappApp')
                         + "\n\nStatus: " + response.status
                         + "\nMsg: " + response.data);
 
-                    $scope.markUsers(requestObject.recipients, [{id: '100004353247811'}]);
-                    $location.path('/step4');
+                    //$scope.markUsers(requestObject.recipients, [{id: '100004353247811'}]);
+                    //$location.path('/step4');
+
+                    $scope.nextBtnLoading = false;
                 });
             }
         };
@@ -62,7 +74,7 @@ angular.module('myappApp')
 
             // mark recipients as KB/non-KB:
             _.each(recipients, function (user) {
-                user.notification_sent =  _.findWhere(notification_sent, {id: user.id}) ? true : false;
+                user.notification_sent =  user.notification_sent || _.findWhere(notification_sent, {id: user.id}) ? true : false;
                 user.isFbKooboodleUser =  user.notification_sent;
             });
 

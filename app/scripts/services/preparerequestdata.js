@@ -15,6 +15,7 @@ angular.module('myappApp')
                         return mapped;
                     })[0],
                 recipients = requestObject.recipients
+                    .filter(function (u) { return !u.notification_sent;})
                     .map(function (user) {
                         return {
                             id: user.id,

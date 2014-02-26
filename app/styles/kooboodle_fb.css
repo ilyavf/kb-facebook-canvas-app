@@ -81,7 +81,7 @@ h2 {
     font-weight: normal;
     text-transform: uppercase;
     text-align: center;
-    margin: 20px 0;
+    margin: 30px 0;
 }
 h3 {
     font-size: 1.6rem;
@@ -131,7 +131,6 @@ h3 strong, h3.accent1 {
 .info {
     background: #e5f0ea;
     border: 1px solid #c8dcd3;
-    font-size: 1.2rem;
     padding: 20px;
     color: #576c63;
 }
@@ -181,6 +180,14 @@ hr {
 }
 .button.next {
     float: right;
+}
+.button.next.loader {
+    background-image: url('../images/btn-loader.gif');
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    cursor: default;
+    color: #7a72a9;
+    font-size: 0px;
 }
 .nav-buttons {
     overflow: hidden;

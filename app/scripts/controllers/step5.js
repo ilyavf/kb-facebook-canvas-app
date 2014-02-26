@@ -9,7 +9,7 @@ angular.module('myappApp')
 
         $scope.isValid = true;
 
-        $timeout(function () {
-            $scope.$emit('wizardInactive');
-        }, 3000);
+//        $timeout(function () {
+//            $scope.$emit('wizardInactive');
+//        }, 3000);
     });

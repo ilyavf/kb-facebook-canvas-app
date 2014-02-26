@@ -19,5 +19,5 @@
 
 <div class="nav-buttons">
     <a class="step3-back btn button button-large prev" href="#/step2" ng-click="save()">Back</a>
-    <a class="send-request btn button button-large next" ng-click="nextIfValid($event)">Send Request</a>
+    <a class="send-request btn button button-large next {{nextBtnLoading ? 'loader' : ''}}" ng-click="nextIfValid($event)">Send Request</a>
 </div>
