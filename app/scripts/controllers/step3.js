@@ -46,9 +46,16 @@ angular.module('myappApp')
                     type: 'request',
                     recipients: requestData.recipients
                 }).then(function (response) {
-                    var data = JSON.parse(response.data.replace(/([^\}]*)$/g, ''));
+                    var data;
+                    try {
+                        data = JSON.parse(response.data.replace(/([^\}]*)$/g, ''));
+                    } catch (e) {
+                        console.log('*** Error *** unexpected answer from server', arguments);
+                    }
 
-                    $scope.markUsers(requestObject.recipients, data.notification_sent);
+                    if (data && data.notification_sent) {
+                        $scope.markUsers(requestObject.recipients, data.notification_sent);
+                    }
 
                     //TODO: convert to a promise:
                     SaveRequestData(requestData);
