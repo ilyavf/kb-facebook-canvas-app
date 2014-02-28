@@ -22,7 +22,7 @@
         </li>
     </ul>
 
-    <p>
+    <p ng-if="kbUsers.length > 0">
         Your friend{{kbUsers.length > 1 ? 's' : ''}} <strong>{{kbUsersString}}</strong> already use{{kbUsers.length == 1 ? 's' : ''}} Kooboodle.
         We automatically sent {{kbUsers.length > 1 ? 'them' : 'him'}} a request for photos.
         When a photo is uploaded you will receive a Facebook Notification.
