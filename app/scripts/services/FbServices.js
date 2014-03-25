@@ -7,12 +7,14 @@ angular.module('myappApp')
         return {
             requestMsg: function (userId, subjectId) {
                 var deferred = $q.defer(),
-                    promise = deferred.promise;
+                    promise = deferred.promise,
+                    urlFbApp = 'https://apps.facebook.com/kooboodle/',
+                    urlDirect = 'https://testb.kooboodle.com/_fb/canvas_app/';
 
                 FB.ui({
                     method: 'send',
                     to: userId,
-                    link: 'https://apps.facebook.com/kooboodle/?requestsubject=' + subjectId
+                    link: urlDirect + '?requestsubject=' + subjectId
                 }, function (response) {
                     // no response according to https://developers.facebook.com/docs/reference/dialogs/send/
                     console.log('[FbServices.requestMsg] resolved', response);
