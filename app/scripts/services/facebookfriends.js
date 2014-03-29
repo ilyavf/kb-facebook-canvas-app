@@ -5,6 +5,9 @@ angular.module('myappApp')
         console.log('[FacebookFriends] init');
         var deffered = $q.defer();
         //FB.api('/me/friends?fields=username,name', function (response) {
+
+        // To retrieve info from "family" table we need "user_relationships" permission.
+        // TODO: Run fb_login with {scope:'user_relationships'} here before the fql.
         FB.api('/fql', {
             q:  {
                 all_friends:
@@ -24,7 +27,8 @@ angular.module('myappApp')
                     friends = ExtendFacebookFriends(allFriendsRaw);
 
                 _.each(familyRaw, function(f) {
-                    var friend = _.where(friends, {id: f.uid})[0];
+                    // Facebook's table "family" stores uid as strings, table "user" has uid as int
+                    var friend = _.where(friends, {id: parseInt(f.uid)})[0];
                     if (friend) friend.relationship = f.relationship;
                 });
                 if (spouse) {

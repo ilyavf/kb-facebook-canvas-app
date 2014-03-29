@@ -48,7 +48,7 @@ angular.module('myappApp')
             } else {
                 console.log('User cancelled login or did not fully authorize.');
             }
-        }, {scope: 'user_friends,user_photos,publish_stream'});
+        }, {scope: 'user_friends,user_photos,publish_stream,user_relationships'});
     }
     function fb_getMyInfo (user) {
         FB.api('/me?fields=name,username,relationship_status,significant_other', function (response) {
