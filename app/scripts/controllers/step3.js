@@ -87,7 +87,7 @@ angular.module('myappApp')
 
             // mark recipients as KB/non-KB:
             _.each(recipients, function (user) {
-                user.notification_sent =  user.notification_sent || _.findWhere(notification_sent, {id: user.id}) ? true : false;
+                user.notification_sent =  user.notification_sent || _.findWhere(notification_sent, {id: parseInt(user.id)}) ? true : false;
                 user.isFbKooboodleUser =  user.notification_sent;
             });
 
