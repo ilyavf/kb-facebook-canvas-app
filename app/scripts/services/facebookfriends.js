@@ -32,7 +32,7 @@ angular.module('myappApp')
                     if (friend) friend.relationship = f.relationship;
                 });
                 if (spouse) {
-                    var friend = _.where(friends, {id: spouse})[0];
+                    var friend = _.where(friends, {id: parseInt(spouse.id)})[0];
                     if (friend) friend.relationship = 'spouse';
                 }
                 console.log('All friends: ' + friends.length);
