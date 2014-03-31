@@ -14,7 +14,7 @@ angular.module('myappApp')
                 FB.ui({
                     method: 'send',
                     to: userId,
-                    link: urlDirect + '?requestsubject=' + subjectId
+                    link: urlFbApp + '?requestsubject=' + subjectId
                 }, function (response) {
                     // no response according to https://developers.facebook.com/docs/reference/dialogs/send/
                     console.log('[FbServices.requestMsg] resolved', response);
