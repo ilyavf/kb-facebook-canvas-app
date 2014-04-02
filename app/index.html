@@ -58,11 +58,12 @@
 
             <hr ng-show="flow !== 'receiver'" />
 
-            <div ng-cloak class="view-container user-requests --animate-show-hide" ng-controller="UserrequestsCtrl" ng-include="'views/user_requests.html'" ng-show="isVisible && userdata.sent"></div>
-
             <div class="view-container">
                 <div ng-view class="--slide"></div>
             </div>
+
+            <div ng-cloak class="view-container user-requests --animate-show-hide" ng-controller="UserrequestsCtrl" ng-include="'views/user_requests.html'" ng-show="isVisible && userdata.sent"></div>
+
         </div>
       </div>
     </div>
