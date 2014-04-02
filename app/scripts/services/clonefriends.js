@@ -20,6 +20,8 @@ angular.module('myappApp')
             friendsCloned.reset = function () {
                 _.each(this, function (f) {
                     f.selected = false;
+                    f.notification_sent = false;
+                    f.msgSent = false;
                 })
             }
             return friendsCloned;
