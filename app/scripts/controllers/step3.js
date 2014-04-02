@@ -6,11 +6,16 @@ angular.module('myappApp')
             console.log('- resetting recipients in friends array', requestObject);
             FriendReceivers.reset();
         }
+        $scope.$emit('wizardActive');
 
         console.log('Step 3');
+        $scope.onlyRelevantFriends = requestObject.subject.relationship == 'myself' ? true : false;
 
         $scope.selectedSubject = requestObject.subject.name;
         $scope.friends = FriendReceivers;
+//            $scope.onlyRelevantFriends
+//            ? FriendReceivers.filter(function (f) { return f.taggedMe; })
+//            : FriendReceivers;
         $scope.placeholder = 'Filter';
         $scope.nav1State = 'passed';
         $scope.nav2State = 'passed';
@@ -28,6 +33,7 @@ angular.module('myappApp')
             if (requestObject.recipients.length === 0) {
                 $event.preventDefault();
                 $scope.invalidInput = 'animate-invalid-text';
+                console.log('[nextIfValid] not valid: ' + requestObject.recipients.length, requestObject);
             } else {
                 var requestData = PrepareRequestData();
 
@@ -55,6 +61,7 @@ angular.module('myappApp')
 
                     if (data && data.notification_sent) {
                         $scope.markUsers(requestObject.recipients, data.notification_sent);
+                        $scope.markUsers(requestData.recipients, data.notification_sent);
                     }
 
                     //TODO: convert to a promise:
@@ -80,7 +87,9 @@ angular.module('myappApp')
             $scope.invalidInput = '';
         };
         $scope.save = function () {
-            requestObject.recipients = _.where(FriendReceivers, {selected:true});
+            requestObject.recipients = $scope.friends.filter(function (f) {
+                return f.selected == true && (!$scope.onlyRelevantFriends || f.taggedMe);
+            });
         };
 
         $scope.markUsers = function (recipients, notification_sent) {
@@ -88,14 +97,14 @@ angular.module('myappApp')
             // mark recipients as KB/non-KB:
             _.each(recipients, function (user) {
                 user.notification_sent =  user.notification_sent || _.findWhere(notification_sent, {id: user.id}) ? true : false;
-                user.isFbKooboodleUser =  user.notification_sent;
+                user.existingUser =  user.notification_sent;
             });
 
             console.log('Kooboodle users: ' + recipients
-                .filter(function(u){ return u.isFbKooboodleUser;})
+                .filter(function(u){ return u.existingUser;})
                 .map(function(u){ return u.name;}).join(', ') + '');
             console.log('NON Kooboodle users: ' + recipients
-                .filter(function(u){ return !u.isFbKooboodleUser;})
+                .filter(function(u){ return !u.existingUser;})
                 .map(function(u){ return u.name;}).join(', ') + '');
         }
     });

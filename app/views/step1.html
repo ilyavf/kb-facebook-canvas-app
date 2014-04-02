@@ -4,12 +4,16 @@
 
 <h3><strong>Step 1:</strong> First, tell us what kind of photos you would like to collect:</h3>
 
-<div class="buttons-container">
+<div class="buttons-container wide full">
+    <div class="button-container">
+        <a href="#/step3" ng-click="setType('myself');" class="photos-of-friend button button-large accent3">Photos of Me</a>
+        <div class="button-description">Find photos of yourself</div>
+    </div>
     <div class="button-container">
         <a href="#/step2" ng-click="setType('friend');" class="photos-of-friend button button-large accent1">Photos of a Friend</a>
-        <div class="button-description">Find photos of yourself or a friend or family member on Facebook.</div>
+        <div class="button-description">Find photos of a friend or family member on Facebook</div>
     </div>
-    <div class="button-container right">
+    <div class="button-container">
         <a href="#/step2" ng-click="setType('event');" class="photos-of-event button clickable button-large accent2">Photos of an Event</a>
         <div class="button-description">Get photos of an event, place or any object from Facebook friends</div>
     </div>

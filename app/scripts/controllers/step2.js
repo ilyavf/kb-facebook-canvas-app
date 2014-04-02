@@ -6,6 +6,8 @@ angular.module('myappApp')
             console.log('- resetting subject in friends array');
             FriendObjects.reset();
         }
+        $scope.$emit('wizardActive');
+
         $scope.placeholderValue = requestObject.type === 'friend' ? "Your name or friend's name" : 'e.g. "Trip to France", "The Eiffel Tower", "Christmas"';
         $scope.placeholder = $scope.placeholderValue;
         $scope.hidePlaceholder = function () {
@@ -24,10 +26,9 @@ angular.module('myappApp')
                 f.selected = false;
             });
             friend.selected = true;
-            requestObject.subject = friend;
+            $scope.subject = requestObject.subject = friend;
             requestObject.subject.type = 'friend';
         };
-        $scope.$emit('wizardActive');
         $scope.nav1State = 'passed';
         $scope.nav2State = 'active';
         $scope.nextIfValid = function ($event) {

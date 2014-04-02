@@ -1,12 +1,13 @@
 'use strict';
 
 angular.module('myappApp')
-    .factory('CloneFriends', function ($rootScope, FacebookFriends, FacebookTagFriends) {
+    .factory('CloneFriends', function ($rootScope, FacebookFriends) {
         console.log('[CloneFriends] init');
         return function (name, initValue, source) {
             console.log('[CloneFriends] exec for ' + name);
             var friendsCloned = [],
-                dataService = source === 'RELEVANT_FRIENDS' && false ? FacebookTagFriends : FacebookFriends;
+                //dataService = source === 'RELEVANT_FRIENDS' ? FacebookTagFriends : FacebookFriends;
+                dataService = FacebookFriends;
             if (initValue) {
                 friendsCloned.push(initValue);
             }

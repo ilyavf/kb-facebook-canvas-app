@@ -6,11 +6,11 @@ angular.module('myappApp')
         var deffered = $q.defer();
         FB.api('/fql', {
             q:  'SELECT name, username, uid FROM user WHERE uid IN (' +
-                'SELECT uid1 FROM friend WHERE uid2=me() and uid1 IN (' +
-                'SELECT owner FROM photo WHERE object_id IN (' +
-                'SELECT object_id FROM photo_tag WHERE subject = me()' +
-                ')' +
-                ')' +
+                    'SELECT uid1 FROM friend WHERE uid2=me() and uid1 IN (' +
+                        'SELECT owner FROM photo WHERE object_id IN (' +
+                            'SELECT object_id FROM photo_tag WHERE subject = me()' +
+                        ')' +
+                    ')' +
                 ')'
         }, function (response) {
             var friends = ExtendFacebookFriends(response.data);

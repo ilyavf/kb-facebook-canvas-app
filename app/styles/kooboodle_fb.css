@@ -203,6 +203,10 @@ a.button-large, a.button-large:hover, a.button-large:active {
 .buttons-container.wide {
     max-width: 430px;
 }
+.buttons-container.full {
+    text-align: center;
+    max-width: 100%;
+}
 .buttons-container .button-container {
     display: inline-block;
     margin: 0 10px;

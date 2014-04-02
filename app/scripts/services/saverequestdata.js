@@ -18,6 +18,8 @@ angular.module('myappApp')
                     username: i.username,
                     relationship: i.relationship,
                     status: 'pending',
+                    notificationSent: i.notification_sent,
+                    existingUser: i.existingUser,
                     date: new Date().toJSON()
                 };})
                 .forEach(function (recipient) {

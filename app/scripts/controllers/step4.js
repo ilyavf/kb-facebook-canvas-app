@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('Step4Ctrl', function($scope, requestObject, FbServices) {
+    .controller('Step4Ctrl', function($scope, requestObject, FbServices, CurrentUser) {
         console.log('Step 4');
 
-        $scope.kbUsers = requestObject.recipients.filter(function(u){ return u.isFbKooboodleUser; });
-        $scope.nonKbUsers = requestObject.recipients.filter(function(u){ return !u.isFbKooboodleUser; });
+        $scope.kbUsers = requestObject.recipients.filter(function(u){ return u.existingUser; });
+        $scope.nonKbUsers = requestObject.recipients.filter(function(u){ return !u.existingUser; });
 
         $scope.kbUsersString = $scope.kbUsers.length > 0 && $scope.kbUsers.map(function(u){ return u.name; }).join(', ').replace(/\,([^\,]*)$/, ' and $1');
         $scope.nonKbUsersString = $scope.nonKbUsers.length > 0 && $scope.nonKbUsers.map(function(u){ return u.name; }).join(', ').replace(/\,([^\,]*)$/, ' and $1');
@@ -32,6 +32,13 @@ angular.module('myappApp')
                 if (result.status === 'success') {
                     user.msgSent = true;
                     $scope.done = true;
+                    // save user:
+                    CurrentUser.$fire.$child('sent')
+                        .$child(requestObject.subject.id)
+                        .$child('recipients')
+                        .$child(user.id)
+                        .$child('directMessageSent')
+                        .$set(true);
                 }
             });
         };

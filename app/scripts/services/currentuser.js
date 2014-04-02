@@ -12,7 +12,8 @@ angular.module('myappApp')
                 id: null,
                 name: null,
                 username: null,
-                relationship: 'myself'
+                relationship: 'myself',
+                existingUser: true
             },
             $fire: null
             //$fire: $firebase(GetUser(userId))

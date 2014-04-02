@@ -10,7 +10,7 @@
        placeholder="{{placeholder}}" ng-focus="placeholder = ''" ng-blur="placeholder = 'Filter'"/>
 
 <ul class="friend-list">
-    <li ng-repeat="friend in friends | matchedOrSelected:friendNameQuery" ng-click="friend.selected = !friend.selected; clearValidation();" class="{{friend.selected ? 'selected' : ''}}">
+    <li ng-repeat="friend in friends | matchedOrSelected:friendNameQuery" ng-show="!onlyRelevantFriends || friend.taggedMe == true" ng-click="friend.selected = !friend.selected; clearValidation();" class="{{friend.selected ? 'selected' : ''}}">
         <img src="//graph.facebook.com/{{friend.id}}/picture" />
         <span>{{friend.name}}</span>
     </li>

@@ -15,7 +15,15 @@ angular.module('myappApp')
                         'SELECT uid1 FROM friend WHERE uid2=me()' +
                     ')',
                 family_members:
-                    'SELECT uid, relationship FROM family WHERE profile_id = me()'
+                    'SELECT uid, relationship FROM family WHERE profile_id = me()',
+                tagged_me:
+                    'SELECT name, username, uid FROM user WHERE uid IN (' +
+                        'SELECT uid1 FROM friend WHERE uid2=me() and uid1 IN (' +
+                            'SELECT owner FROM photo WHERE object_id IN (' +
+                                'SELECT object_id FROM photo_tag WHERE subject = me()' +
+                            ')' +
+                        ')' +
+                    ')'
             }
         }, function (response) {
             if (response.error) {
@@ -23,13 +31,22 @@ angular.module('myappApp')
             } else {
                 var allFriendsRaw = _.where(response.data, {name: "all_friends"})[0].fql_result_set,
                     familyRaw = _.where(response.data, {name: "family_members"})[0].fql_result_set,
+                    taggedMeRaw = _.where(response.data, {name: "tagged_me"})[0].fql_result_set,
                     spouse = CurrentUser.info.spouse,
                     friends = ExtendFacebookFriends(allFriendsRaw);
 
-                _.each(familyRaw, function(f) {
+                _.each(friends, function(f) {
                     // Facebook's table "family" stores uid as strings, table "user" has uid as int
-                    var friend = _.where(friends, {id: parseInt(f.uid)})[0];
-                    if (friend) friend.relationship = f.relationship;
+
+                    var relationship = _.reduce(familyRaw, function (memo, cur) { return cur.uid == f.id ? cur.relationship : memo}, false),
+                        taggedMe = _.reduce(taggedMeRaw, function (memo, cur) { return memo || cur.uid == f.id}, false);
+
+                    if (relationship) {
+                        f.relationship = relationship;
+                    }
+                    if (taggedMe) {
+                        f.taggedMe = true;
+                    }
                 });
                 if (spouse) {
                     var friend = _.where(friends, {id: parseInt(spouse.id)})[0];
