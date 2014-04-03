@@ -6,15 +6,15 @@
 
 <div class="buttons-container wide full">
     <div class="button-container">
-        <a href="#/step3" ng-click="setType('myself');" class="photos-of-friend button button-large accent3">Photos of Me</a>
+        <a href="#/step3" ng-click="setType($event, 'myself');" class="photos-of-friend button button-large accent3">Photos of Me</a>
         <div class="button-description">Find photos of yourself</div>
     </div>
     <div class="button-container">
-        <a href="#/step2" ng-click="setType('friend');" class="photos-of-friend button button-large accent1">Photos of a Friend</a>
+        <a href="#/step2" ng-click="setType($event, 'friend');" class="photos-of-friend button button-large accent1">Photos of a Friend</a>
         <div class="button-description">Find photos of a friend or family member on Facebook</div>
     </div>
     <div class="button-container">
-        <a href="#/step2" ng-click="setType('event');" class="photos-of-event button clickable button-large accent2">Photos of an Event</a>
+        <a href="#/step2" ng-click="setType($event, 'event');" class="photos-of-event button clickable button-large accent2">Photos of an Event</a>
         <div class="button-description">Get photos of an event, place or any object from Facebook friends</div>
     </div>
 </div>

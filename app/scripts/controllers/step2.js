@@ -1,12 +1,20 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('Step2Ctrl', function($scope, FriendObjects, requestObject) {
+    .controller('Step2Ctrl', function($scope, $location, FriendObjects, requestObject) {
+        console.log('Step 2 ' + requestObject.type);
+
         if (!requestObject.subject.name || requestObject.type !== 'friend') {
             console.log('- resetting subject in friends array');
-            FriendObjects.reset();
+            FriendObjects.then(function (friends) {
+                friends.reset();
+            });
         }
         $scope.$emit('wizardActive');
+
+        FriendObjects.then(function (friends) {
+            $scope.friends = friends;
+        });
 
         $scope.placeholderValue = requestObject.type === 'friend' ? "Your name or friend's name" : 'e.g. "Trip to France", "The Eiffel Tower", "Christmas"';
         $scope.placeholder = $scope.placeholderValue;
@@ -18,8 +26,6 @@ angular.module('myappApp')
         }
         $scope.subjectType = requestObject.type;
         $scope.subjectEvent = requestObject.subject;
-        console.log('Step 2 ' + requestObject.type);
-        $scope.friends = FriendObjects;
         $scope.singleSelect = function (friend) {
             $scope.invalidInput = '';
             angular.forEach($scope.friends, function (f) {
@@ -45,7 +51,7 @@ angular.module('myappApp')
                     };
                 }
             }
-            if (!requestObject.subject) {
+            if (!requestObject.subject || !requestObject.subject.id ) {
                 console.log('Validation error ' + requestObject.subject, requestObject.subject);
                 $event.preventDefault();
                 $scope.invalidInput = 'animate-invalid-input';

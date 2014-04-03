@@ -1,21 +1,26 @@
 'use strict';
 
 angular.module('myappApp')
-    .factory('CloneFriends', function ($rootScope, FacebookFriends) {
+    .factory('CloneFriends', function ($q,  FacebookFriends, CurrentUser) {
         console.log('[CloneFriends] init');
-        return function (name, initValue, source) {
+
+        return function (name, initValue, reinit) {
+            var deferred = $q.defer(),
+                friendsCloned = [];
+
             console.log('[CloneFriends] exec for ' + name);
-            var friendsCloned = [],
                 //dataService = source === 'RELEVANT_FRIENDS' ? FacebookTagFriends : FacebookFriends;
-                dataService = FacebookFriends;
-            if (initValue) {
-                friendsCloned.push(initValue);
+            if (initValue && initValue == 'myself') {
+                CurrentUser.loginStatus.then(function () {
+                    friendsCloned.push(_.clone(CurrentUser.info));
+                });
             }
-            dataService.then(function(friends) {
-                console.log('[CloneFriends] then for ' + name + '(' + source + ')', friends);
+            FacebookFriends(reinit).then(function(friends) {
+                console.log('[CloneFriends] then for ' + name, friends);
                 _.each(friends, function (f) {
                     friendsCloned.push(_.clone(f));
                 });
+                deferred.resolve(friendsCloned);
             });
             friendsCloned.reset = function () {
                 _.each(this, function (f) {
@@ -24,6 +29,7 @@ angular.module('myappApp')
                     f.msgSent = false;
                 })
             }
-            return friendsCloned;
+
+            return deferred.promise;
         }
     });

@@ -7,6 +7,7 @@ angular.module('myappApp')
         loginStatusDeferred = $q.defer(),
         user = {
             initialized: false,
+            loggedIn: false,
             loginStatus: loginStatusDeferred.promise,
             info: {
                 id: null,
@@ -15,7 +16,11 @@ angular.module('myappApp')
                 relationship: 'myself',
                 existingUser: true
             },
-            $fire: null
+            $fire: null,
+            login: function (perm) {
+                console.log('Logging in to Facebook... ' + (perm ? ' asking for ' + perm : '' ));
+                return fb_login(user, perm);
+            }
             //$fire: $firebase(GetUser(userId))
             //data: GetUser(userId)
         };
@@ -24,33 +29,46 @@ angular.module('myappApp')
     FB.init({
         appId: fbAppId
     });
-    console.log('FB getLoginStatus...');
-    FB.getLoginStatus(function(response) {
-        console.log(response);
-        if (response && response.status === "connected") {
-            console.log('Already connected with FB');
-            fb_getMyInfo(user);
-        } else {
-            console.log('Not logged in. Logging in to Facebook...');
-            fb_login(user);
-        }
-    });
 
     console.log('[factory.CurrentUser]: ' + angular.toJson(user));
     window.CurrentUser = user;
     return user;
 
-    function fb_login(user) {
-        FB.login(function(response) {
+    function fb_login(user, perm) {
+        var deferred = $q.defer();
+
+        var callback = function(response) {
             if (response.authResponse) {
-                console.log('Welcome!  Fetching your information.... ');
-                fb_getMyInfo(user);
+                // ilya: user.loginStatus is a promise that gets resolved by fb_getMyInfo().
+                deferred.resolve(user.loginStatus);
+
+                console.log('[CurrentUser]: Logged in successfully ');
+                if (!user.loggedIn) {
+                    console.log('- fetching user information...');
+                    fb_getMyInfo(user);
+                }
 
             } else {
-                console.log('User cancelled login or did not fully authorize.');
+                var msg = 'User cancelled login or did not fully authorize.';
+                deferred.reject(msg);
+                console.log(msg);
             }
-        }, {scope: 'user_friends,user_photos,publish_stream,user_relationships'});
+        };
+
+        //if (!user.loggedIn) {
+        //    fb_initial_login ()
+        //}
+
+        if (perm) {
+            FB.login( callback, {scope: perm} );
+            //{scope: 'user_friends,user_photos,publish_stream,user_relationships'}
+        } else {
+            FB.login( callback );
+        }
+
+        return deferred.promise;
     }
+
     function fb_getMyInfo (user) {
         FB.api('/me?fields=name,username,relationship_status,significant_other', function (response) {
             console.log('[fb_getMyInfo]: FB.api/me - Current user: ' + response.name + '.', response);
@@ -71,4 +89,25 @@ angular.module('myappApp')
             });
         });
     }
+
+//    function fb_initial_login () {
+//        console.log('FB getLoginStatus...');
+//        FB.getLoginStatus(function(response) {
+//            console.log(response);
+//            if (response && response.status === "connected") {
+//                console.log('Already connected with FB');
+//                fb_getMyInfo(user);
+//            } else {
+//                console.log('Not logged in. Logging in to Facebook...');
+//                if (perm) {
+//                    FB.login( callback, {scope: perm} );
+//                    //{scope: 'user_friends,user_photos,publish_stream,user_relationships'}
+//                } else {
+//                    FB.login( callback );
+//                }
+//            }
+//        });
+//    }
+
+
 });

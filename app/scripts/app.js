@@ -11,8 +11,10 @@ angular.module('myappApp', [
     .config(function ($routeProvider) {
         $routeProvider
             .when('/', {
-                controller: 'InitCtrl',
-                templateUrl:'views/init.html'
+                controller: 'Step1Ctrl',
+                templateUrl:'views/step1.html'
+//                controller: 'InitCtrl',
+//                templateUrl:'views/init.html'
             })
             .when('/init/:ctrl/:action', {
                 controller: 'InitCtrl',

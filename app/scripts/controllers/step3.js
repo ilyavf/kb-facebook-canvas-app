@@ -1,21 +1,39 @@
 'use strict';
 
 angular.module('myappApp')
-    .controller('Step3Ctrl', function($scope, $location, $window, FriendReceivers, requestObject, PrepareRequestData, SaveRequestData, SendRequest) {
+    .controller('Step3Ctrl', function Step3Ctrl(
+        $scope, $location, $window, FriendReceivers, FriendObjects, requestObject, PrepareRequestData, SaveRequestData, SendRequest
+    ) {
         if (!requestObject.recipients.length) {
             console.log('- resetting recipients in friends array', requestObject);
-            FriendReceivers.reset();
+            FriendReceivers.then(function (friends) {
+                friends.reset();
+            });
         }
         $scope.$emit('wizardActive');
+
+        if (requestObject.type == 'myself') {
+            requestObject.type = 'friend';
+            FriendObjects.then(function (friends) {
+                friends.reset();
+                friends[0].selected = true;
+                requestObject.subject = friends[0];
+                requestObject.subject.type = 'friend';
+            });
+        }
+
+        FriendReceivers.then(function (friends) {
+            $scope.friends = friends;
+
+            //$scope.onlyRelevantFriends
+            //? FriendReceivers.filter(function (f) { return f.taggedMe; })
+            //: FriendReceivers;
+        });
 
         console.log('Step 3');
         $scope.onlyRelevantFriends = requestObject.subject.relationship == 'myself' ? true : false;
 
         $scope.selectedSubject = requestObject.subject.name;
-        $scope.friends = FriendReceivers;
-//            $scope.onlyRelevantFriends
-//            ? FriendReceivers.filter(function (f) { return f.taggedMe; })
-//            : FriendReceivers;
         $scope.placeholder = 'Filter';
         $scope.nav1State = 'passed';
         $scope.nav2State = 'passed';
