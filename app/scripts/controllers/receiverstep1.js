@@ -2,21 +2,55 @@
 
 angular.module('myappApp')
     .controller('Receiverstep1Ctrl', function ($scope, $routeParams, CurrentUser, $location, $upload, getAlbumId, GetPhotoUrlPromise, GetUser, SendRequest) {
-
-        CurrentUser.login('user_photos,publish_stream')
-            .then(function (profilePromise) {
-                return profilePromise;
-            })
-            .then(function () {
-
-        $scope.$emit('changeFlow', 'receiver');
         console.log('[Receiverstep1Ctrl]:' + $routeParams['requestId']);
+
+        var permissions = {
+            read: {
+                val: 'user_photos',
+                has: false
+            },
+            write: {
+                val: 'publish_stream',
+                has: false
+            }
+        };
+
+        CurrentUser.login(permissions.read.val)
+            .then(function (permissionReadPromise) {
+                console.log('[Receiverstep1Ctrl] requested permissions. Checking them now...');
+                return permissionReadPromise;
+            })
+            .then(function (allPermissions) {
+                console.log('[Receiverstep1Ctrl] Permissions are OK: ', allPermissions);
+                permissions.read.has = true;
+                proceed();
+            })
+            .catch(function (reason) {
+                console.log('[Receiverstep1Ctrl] permissions rejected: ', reason);
+            });
+
         $scope.isUploaderVisible = false;
-        $scope.$emit('wizardActive');
         $scope.openUploader = function () {
-            console.log('[openUploader clicked]');
-            $scope.isUploaderVisible = true;
-            document.getElementById('file-upload-input').click();
+            if (!permissions.write.has) {
+                console.log('[openUploader] no write perm. Asking for them...');
+                CurrentUser.login(permissions.write.val)
+                    .then(function (permissionReadPromise) {
+                        console.log('[Receiverstep1Ctrl] requested permissions. Checking them now...');
+                        return permissionReadPromise;
+                    })
+                    .then(function (allPermissions) {
+                        console.log('[Receiverstep1Ctrl] Permissions are OK: ', allPermissions);
+                        permissions.write.has = true;
+                        $scope.isUploaderVisible = true;
+                        document.getElementById('file-upload-input').click();
+                    })
+                    .catch(function (reason) {
+                        console.log('[Receiverstep1Ctrl] permissions rejected: ', reason);
+                    });
+            } else {
+                $scope.isUploaderVisible = true;
+                document.getElementById('file-upload-input').click();
+            }
         };
         $scope.uploadedPhotos = [];
 
@@ -24,23 +58,6 @@ angular.module('myappApp')
         $scope.showEventMsg = function () {
             $scope.isEventMsgShown = !$scope.isEventMsgShown;
         };
-
-        var pending = _.where(CurrentUser.$fire.received, {status: 'pending'}),
-            pendingRequest = $routeParams['requestId'] && _.filter(CurrentUser.$fire.received, function (o) { return o.subject.id == $routeParams['requestId']})[0]
-                || pending[pending.length - 1];
-
-        console.log('- # of pending requests: ' + pending.length);
-        console.log('- processing request: ' + pendingRequest.subject.name);
-
-        if (!pendingRequest) {
-            console.log('[Receiverstep1Ctrl] no pending requests found. Redirecting to init step...');
-            $location.path('/');
-            return;
-        }
-
-        $scope.senderName = pendingRequest.sender.name;
-        $scope.senderImgUrl = '//graph.facebook.com/' + pendingRequest.sender.username + '/picture';
-        $scope.subjectName = pendingRequest.subject.name;
 
 
         $scope.dialogPhotofinderIsVisible = false;
@@ -57,106 +74,129 @@ angular.module('myappApp')
             CurrentUser.$fire.$save();
         }
 
-        //angular.forEach(pending, function (request) {});
-        if (pending.length === 0) {
-            console.log('WARNING: no pending requests found in ReceiverStep1');
-            $location.path('/');
-            return;
+        function proceed () {
+
+            $scope.$emit('changeFlow', 'receiver');
+            $scope.$emit('wizardActive');
+
+            var pending = _.where(CurrentUser.$fire.received, {status: 'pending'}),
+                pendingRequest = $routeParams['requestId'] && _.filter(CurrentUser.$fire.received, function (o) { return o.subject.id == $routeParams['requestId']})[0]
+                    || pending[pending.length - 1];
+
+            console.log('- # of pending requests: ' + pending.length);
+            console.log('- processing request: ' + pendingRequest.subject.name);
+
+            if (!pendingRequest) {
+                console.log('[Receiverstep1Ctrl] no pending requests found. Redirecting to init step...');
+                $location.path('/');
+                return;
+            }
+
+            $scope.senderName = pendingRequest.sender.name;
+            $scope.senderImgUrl = '//graph.facebook.com/' + pendingRequest.sender.username + '/picture';
+            $scope.subjectName = pendingRequest.subject.name;
+
+
+            //angular.forEach(pending, function (request) {});
+            if (pending.length === 0) {
+                console.log('WARNING: no pending requests found in ReceiverStep1');
+                $location.path('/');
+                return;
+            }
+
+            var albumPromise = getAlbumId(pendingRequest),
+                correspondingSentRequest = GetUser(pendingRequest.sender.id).child('sent').child(pendingRequest.subject.id).child('recipients').child(CurrentUser.info.id);
+
+            albumPromise.then(function (albumData) {
+                console.log('albumPromise resolved with:' + albumData.id, albumData);
+
+                var uploadUrl = 'https://graph.facebook.com/' + albumData.id + '/photos';
+                console.log('uploadUrl = ' + uploadUrl);
+
+
+                $scope.onFileSelect = function($files) {
+                    $scope.loading = "loading";
+
+                    var uploadedFiles = 0;
+
+                    //$files: an array of files selected, each file has name, size, and type.
+                    for (var i = 0; i < $files.length; i++) {
+                        var file = $files[i];
+                        console.log('- file: ', file);
+                        (function(i, file){
+                            console.log('- starting upload for ' + i);
+                            $scope.upload = $upload.upload({
+                                url: uploadUrl, //upload.php script, node.js route, or servlet url
+                                // method: POST or PUT,
+                                // headers: {'headerKey': 'headerValue'},
+                                withCredential: true,
+                                data: {
+                                    //myObj: $scope.myModelObj
+                                    access_token: FB.getAccessToken()
+                                },
+                                file: file
+                                // file: $files, //upload multiple files, this feature only works in HTML5 FromData browsers
+                                /* set file formData name for 'Content-Desposition' header. Default: 'file' */
+                                //fileFormDataName: myFile,
+                                /* customize how data is added to formData. See #40#issuecomment-28612000 for example */
+                                //formDataAppender: function(formData, key, val){}
+                            })
+                                .progress(function(evt) {
+                                    //console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+                                })
+                                .success(function(data, status, headers, config) {
+                                    // file is uploaded successfully
+                                    console.log(data);
+                                    if (data.id) {
+                                        GetPhotoUrlPromise(data.id).then(function (url) {
+                                            console.log('Uploaded: ' + i + ', ' + file.name);
+                                            $scope.uploadedPhotos.push(url);
+                                            uploadedFiles++;
+                                            if (uploadedFiles === $files.length) {
+                                                console.log('ALL files uploaded now' + uploadedFiles);
+                                                $scope.loading = "";
+
+                                                //send notification to the requester:
+                                                SendRequest({
+                                                    sender: CurrentUser.info,
+                                                    subject: pendingRequest.subject,
+                                                    photos: uploadedFiles,
+                                                    recipients: [pendingRequest.sender],
+                                                    type: 'response'
+                                                }).then(function () {
+                                                        console.log('[Receiverstep1Ctrl.sentPromise]: ', arguments);
+                                                    });
+                                            }
+                                        });
+                                    }
+
+                                    // save flag for receiver:
+                                    //pendingRequest.status = 'completed';
+                                    // ilya: this causes error "WebSocket is already in CLOSING or CLOSED state."
+                                    //CurrentUser.$fire.$save();
+
+                                    CurrentUser.$fire.$child('received').$child(pendingRequest.subject.id).$child('status').$set('completed');
+
+                                    // save flag for sender:
+                                    correspondingSentRequest.child('status').set('completed');
+                                    correspondingSentRequest.child('albumInfo').set(albumData);
+                                    correspondingSentRequest.child('date').set(new Date().toJSON());
+                                    correspondingSentRequest.child('photos').push({
+                                        name: file.name,
+                                        size: file.size,
+                                        type: file.type,
+                                        fbId: data.id
+                                    });
+                                });
+                            //.error(...)
+                            //.then(success, error, progress);
+
+                        }(i, file));
+                    }
+                };
+
+            });
+
         }
 
-        var albumPromise = getAlbumId(pendingRequest),
-            correspondingSentRequest = GetUser(pendingRequest.sender.id).child('sent').child(pendingRequest.subject.id).child('recipients').child(CurrentUser.info.id);
-
-        albumPromise.then(function (albumData) {
-            console.log('albumPromise resolved with:' + albumData.id, albumData);
-
-            var uploadUrl = 'https://graph.facebook.com/' + albumData.id + '/photos';
-            console.log('uploadUrl = ' + uploadUrl);
-
-
-            $scope.onFileSelect = function($files) {
-                $scope.loading = "loading";
-
-                var uploadedFiles = 0;
-
-                //$files: an array of files selected, each file has name, size, and type.
-                for (var i = 0; i < $files.length; i++) {
-                    var file = $files[i];
-                    console.log('- file: ', file);
-                    (function(i, file){
-                        console.log('- starting upload for ' + i);
-                        $scope.upload = $upload.upload({
-                            url: uploadUrl, //upload.php script, node.js route, or servlet url
-                            // method: POST or PUT,
-                            // headers: {'headerKey': 'headerValue'},
-                            withCredential: true,
-                            data: {
-                                //myObj: $scope.myModelObj
-                                access_token: FB.getAccessToken()
-                            },
-                            file: file
-                            // file: $files, //upload multiple files, this feature only works in HTML5 FromData browsers
-                            /* set file formData name for 'Content-Desposition' header. Default: 'file' */
-                            //fileFormDataName: myFile,
-                            /* customize how data is added to formData. See #40#issuecomment-28612000 for example */
-                            //formDataAppender: function(formData, key, val){}
-                        })
-                            .progress(function(evt) {
-                                //console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-                            })
-                            .success(function(data, status, headers, config) {
-                                // file is uploaded successfully
-                                console.log(data);
-                                if (data.id) {
-                                    GetPhotoUrlPromise(data.id).then(function (url) {
-                                        console.log('Uploaded: ' + i + ', ' + file.name);
-                                        $scope.uploadedPhotos.push(url);
-                                        uploadedFiles++;
-                                        if (uploadedFiles === $files.length) {
-                                            console.log('ALL files uploaded now' + uploadedFiles);
-                                            $scope.loading = "";
-
-                                            //send notification to the requester:
-                                            SendRequest({
-                                                sender: CurrentUser.info,
-                                                subject: pendingRequest.subject,
-                                                photos: uploadedFiles,
-                                                recipients: [pendingRequest.sender],
-                                                type: 'response'
-                                            }).then(function () {
-                                                console.log('[Receiverstep1Ctrl.sentPromise]: ', arguments);
-                                            });
-                                        }
-                                    });
-                                }
-
-                                // save flag for receiver:
-                                //pendingRequest.status = 'completed';
-                                // ilya: this causes error "WebSocket is already in CLOSING or CLOSED state."
-                                //CurrentUser.$fire.$save();
-
-                                CurrentUser.$fire.$child('received').$child(pendingRequest.subject.id).$child('status').$set('completed');
-
-                                // save flag for sender:
-                                correspondingSentRequest.child('status').set('completed');
-                                correspondingSentRequest.child('albumInfo').set(albumData);
-                                correspondingSentRequest.child('date').set(new Date().toJSON());
-                                correspondingSentRequest.child('photos').push({
-                                    name: file.name,
-                                    size: file.size,
-                                    type: file.type,
-                                    fbId: data.id
-                                });
-                            });
-                        //.error(...)
-                        //.then(success, error, progress);
-
-                    }(i, file));
-                }
-            };
-
-        });
-
-
-            }); // end of login promise wrapper.
     });
