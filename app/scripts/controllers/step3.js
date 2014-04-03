@@ -19,6 +19,7 @@ angular.module('myappApp')
                 friends[0].selected = true;
                 requestObject.subject = friends[0];
                 requestObject.subject.type = 'friend';
+                $scope.selectedSubject = requestObject.subject.name;
             });
         }
 
