@@ -29,7 +29,11 @@ angular.module('myappApp')
             requestData.recipients.forEach(function (recipient) {
                 var user = GetUser(recipient.id);
                 if (!user.info) {
-                    user.child('info').set( {id: recipient.id, name: recipient.name, username: recipient.username} );
+                    var infoFire = user.child('info');
+
+                    infoFire.child('id').set(recipient.id);
+                    infoFire.child('name').set(recipient.name);
+                    infoFire.child('username').set(recipient.username);
                 }
                 user.child('received').child(requestData.rsubject.id).set({
                     subject: requestData.rsubject,
