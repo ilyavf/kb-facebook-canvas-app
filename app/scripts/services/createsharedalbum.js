@@ -8,7 +8,7 @@ angular.module('myappApp')
                 shareWithUserId = pendingRequest.sender.id,
                 shareWithUserName = pendingRequest.sender.name,
                 params = {
-                    name: 'Photos of ' + subjectName + ' (shared with ' + shareWithUserName + ')',
+                    name: 'Photos of ' + subjectName + ' shared with ' + shareWithUserName + ' via Kooboodle',
                     privacy: {
                         'value': 'CUSTOM',
                         'allow': shareWithUserId

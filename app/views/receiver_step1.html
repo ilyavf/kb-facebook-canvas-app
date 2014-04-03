@@ -2,7 +2,7 @@
 
     <div class="user-item">
         <img src="{{senderImgUrl}}" />
-        <strong>{{senderName}}</strong> sent you a request for photos of <strong>{{subjectName}}</strong>.
+        <strong>{{senderName ? senderName : 'Somebody'}}</strong> sent you a request for photos of <strong>{{subjectName ? subjectName : 'a person'}}</strong>.
     </div>
 
     <p class="info-block">
@@ -58,8 +58,8 @@
         </div>
 
     </div>
-    <kb-dialog-photofinder
-        ng-hide="dialogPhotofinderIsHidden"
+    <kb-dialog-photofinder ng-cloak
+        ng-show="dialogPhotofinderIsVisible"
         on-close="hideDialogPhotofinder()"
         on-action="saveEmailAddress()"
         notify-email="notifyEmail"></kb-dialog-photofinder>

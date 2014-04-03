@@ -2,6 +2,13 @@
 
 angular.module('myappApp')
     .controller('Receiverstep1Ctrl', function ($scope, $routeParams, CurrentUser, $location, $upload, getAlbumId, GetPhotoUrlPromise, GetUser, SendRequest) {
+
+        CurrentUser.login('user_photos,publish_stream')
+            .then(function (profilePromise) {
+                return profilePromise;
+            })
+            .then(function () {
+
         $scope.$emit('changeFlow', 'receiver');
         console.log('[Receiverstep1Ctrl]:' + $routeParams['requestId']);
         $scope.isUploaderVisible = false;
@@ -36,12 +43,12 @@ angular.module('myappApp')
         $scope.subjectName = pendingRequest.subject.name;
 
 
-        $scope.dialogPhotofinderIsHidden = true;
+        $scope.dialogPhotofinderIsVisible = false;
         $scope.hideDialogPhotofinder = function () {
-            $scope.dialogPhotofinderIsHidden = true;
+            $scope.dialogPhotofinderIsVisible = false;
         };
         $scope.showDialogPhotofinder = function () {
-            $scope.dialogPhotofinderIsHidden = false;
+            $scope.dialogPhotofinderIsVisible = true;
         };
         $scope.notifyEmail = {value: ''};
         $scope.saveEmailAddress = function () {
@@ -149,4 +156,7 @@ angular.module('myappApp')
             };
 
         });
+
+
+            }); // end of login promise wrapper.
     });

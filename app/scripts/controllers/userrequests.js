@@ -9,9 +9,10 @@ angular.module('myappApp')
         if (!CurrentUser.initialized && (requestMatch || $location.path() !== '/' && $location.path() !== '')) {
             console.log('[UserrequestsCtrl] not initialized yet. Redirecting to init step...' + $location.path());
             var requestSubject = requestMatch && requestMatch[1],
-                path = requestSubject ? '/receiver/' +  requestSubject : $location.path();
+                path = requestSubject ? '/receiver/' +  requestSubject : '/step1';
 
-            $location.path('/init' + path);
+            //$location.path('/init' + path);
+            $location.path(path);
         }
 
         $scope.currentRequestIndex = 0;
