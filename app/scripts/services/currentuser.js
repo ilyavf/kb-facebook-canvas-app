@@ -16,23 +16,23 @@ angular.module('myappApp')
 .factory('CurrentUser', function ($q, $rootScope, GetUser, $firebase) {
 
     var wrapPromises = {};
-    function wrapPromise (promise, async) {
+    function wrapPromise (promiseName, async, asyncArgs) {
         var promises = wrapPromises;
 
-        console.log('[wrapPromise] ' + !!promises[promise] + ' ' + async.length);
-        if (!promises[promise]) {
+        console.log('[wrapPromise] ' + !!promises[promiseName] + ' ' + async.length);
+        if (!promises[promiseName]) {
             console.log('[wrapPromise] creating promise');
             var deferred = $q.defer();
-            promises[promise] = deferred.promise;
+            promises[promiseName] = deferred.promise;
 
             // chain multiple promises:
             var promiseChain = async.reduce(function (asyncPromiseChain, asyncFunc) {
                 if (asyncPromiseChain) {
-                    return asyncPromiseChain.then(function () {
-                        return asyncFunc();
+                    return asyncPromiseChain.then(function (v) {
+                        return asyncFunc(asyncArgs || v);
                     })
                 } else {
-                    return asyncFunc();
+                    return asyncFunc(asyncArgs);
                 }
             }, false);
 
@@ -42,58 +42,37 @@ angular.module('myappApp')
                 })
                 .catch(function (reason) {
                     deferred.reject(reason);
-                    promises[promise] = null;
+                    promises[promiseName] = null;
                 });
         }
 
-        return promises[promise];
+        return promises[promiseName];
     }
 
     var fbAppId = '203880539796100',
         loginStatusDeferred = $q.defer(),
 
-        fbPermissions = [],
-        $fire = null,
-
         api = {
-            //@returns {promise}
+            //@returns {promise} All the  methods below:
             login: function () {
-                return wrapPromise('loginPromise', [fbLogin]);
+                return wrapPromise('login', [fbLogin]);
             },
-            //@returns {promise}
             getInfo: function () {
-//                console.log('api->getInfo()');
-//                if (!infoPromise) {
-//                    var deferred = $q.defer();
-//                    infoPromise = deferred.promise;
-//
-//                    this.login()
-//                        .then(function () {
-//                            return fbGetProfile();
-//                        })
-//                        .then(function (profile) {
-//                            deferred.resolve(profile);
-//                        })
-//                        .catch(function (reason) {
-//                            deferred.reject(reason);
-//                            infoPromise = null;
-//                        });
-//                }
-//                return infoPromise;
-
-                return wrapPromise('infoPromise', [api.login, fbGetProfile]);
+                return wrapPromise('info', [api.login, fbGetProfile]);
             },
-            //@returns {promise}
-            $getFire: function () {
-
-            },
-            //@returns {promise}
             requirePermission: function (perm) {
-
+                return wrapPromise((perm || 'listPermissions'), [fbLogin, fbCheckPerm], perm);
             },
-            //@returns {promise}
-            listPermissions: function (optPerm) {
-
+            $getFire: function () {
+                return wrapPromise('userFirebase', [api.login, userFirebase]);
+            },
+            $saveProfile: function () {
+                return $q.all({
+                    info: api.getInfo(),
+                    $fire: api.$getFire()
+                }).then(function (user) {
+                    user.$fire.$child('info').$set(user.info);
+                });
             }
         },
         user = {
@@ -130,7 +109,7 @@ angular.module('myappApp')
     return user;
 
 
-    function fbLogin() {
+    function fbLogin(perm) {
         var deferred = $q.defer();
         FB.login( function (response) {
             if (response.authResponse) {
@@ -140,7 +119,8 @@ angular.module('myappApp')
                 console.log('[fbLogin]: ' + msg);
                 deferred.reject(msg);
             }
-        });
+        }, {scope: perm});
+
         return deferred.promise;
     }
     function fbGetProfile() {
@@ -161,6 +141,52 @@ angular.module('myappApp')
         });
         return deferred.promise;
     }
+    // When we request permissions then we have make another call to read them from FB:
+    // @return {promise}
+    function fbCheckPerm (perm) {
+        var deferred = $q.defer();
+
+        // This call will return all granted permissions:
+        FB.api('/me/permissions', function(response){
+            console.log('[fbCheckPerm]:', response);
+            var permissions = response && response.data && response.data[0],
+                requestedPerms = perm && perm.split(','),
+                requestedPermsOk = requestedPerms && _.all(requestedPerms, function (v) { return permissions[v];});
+            if (permissions && (!perm || requestedPermsOk)) {
+                console.log('[fbCheckPerm] permissions OK: ' + perm, permissions);
+                deferred.resolve(permissions);
+            } else {
+                console.log('[fbCheckPerm] permissions cancelled: ' + perm, permissions);
+                deferred.reject({
+                    msg: perm ? 'User did not grant requested permissions' : 'Error',
+                    requestedPerm: perm,
+                    receivedPerm: permissions,
+                    response: response
+                });
+            }
+        });
+        return deferred.promise;
+    };
+    function userFirebase (user) {
+        var deferred = $q.defer(),
+            $userFire = $firebase(GetUser(user.id || user.userID));
+
+        $userFire.$on('loaded', function (data) {
+            console.log('[userFirebase] firebase user data loaded: ', data);
+            //$userFire.$child('info').$set(user.info);
+            deferred.resolve($userFire);
+        });
+        return deferred.promise;
+    }
+    function fireSaveProfile ($userFire) {
+        var deferred = $q.defer()
+
+        $userFire.$child('info').$set(user.info);
+            deferred.resolve($userFire);
+        return deferred.promise;
+    }
+
+
     function fb_login(user, perm) {
         var deferred = $q.defer();
 
@@ -173,7 +199,7 @@ angular.module('myappApp')
                 } else {
                     user.loginStatus.then(function () {});
 
-                    deferred.resolve(checkPerm(perm));
+                    deferred.resolve(fbCheckPerm(perm));
                 }
 
             } else {
@@ -181,31 +207,6 @@ angular.module('myappApp')
                 deferred.reject(msg);
                 console.log(msg);
             }
-        };
-
-        // When we request permissions then we have make another call to read them from FB:
-        // @return {promise}
-        var checkPerm = function (perm) {
-            var permissionReadDeferred = $q.defer();
-
-            // This call will return all granted permissions:
-            FB.api('/' + user.info.id + '/permissions', function(response){
-                console.log('Prms:', arguments);
-                var permissions = response && response.data && response.data[0],
-                    requestedPerms = perm.split(',');
-                if (permissions && _.all(requestedPerms, function (v) { return permissions[v];})) {
-                    console.log('[CurrentUser] required permissions granted: ' + perm, permissions);
-                    permissionReadDeferred.resolve(permissions);
-                } else {
-                    console.log('[CurrentUser] permissions cancelled: ' + perm, permissions);
-                    permissionReadDeferred.reject({
-                        msg: 'User did not grant requested permissions',
-                        requestedPerm: perm,
-                        receivedPerm: permissions
-                    });
-                }
-            });
-            return permissionReadDeferred.promise;
         };
 
         if (perm) {
