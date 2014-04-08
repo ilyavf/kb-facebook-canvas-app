@@ -73,12 +73,11 @@ angular.module('myappApp')
                 }).then(function (user) {
                     user.$fire.$child('info').$set(user.info);
                 });
-            }
+            },
+            getFireByUserId: userFirebase
         },
+        // depricated...
         user = {
-            api: api,
-
-            // depricated...
             initialized: false,
             profileLoaded: false,
             loginStatus: loginStatusDeferred.promise,
@@ -106,7 +105,7 @@ angular.module('myappApp')
     window.CurrentUser = api;
 
 
-    return user;
+    return _.extend(user, api);
 
 
     function fbLogin(perm) {

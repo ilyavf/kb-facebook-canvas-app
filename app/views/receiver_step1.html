@@ -7,7 +7,7 @@
 
     <p class="info-block">
         To respond: <a ng-click="openUploader()" class="upload-manually link">upload photos manually</a> <span class="circle">or</span>
-        <a class="use-photofinder link" ng-click="showDialogPhotofinder()">download and install</a> the <strong>Kooboodle PhotoFinder</strong>.
+        <a class="use-photofinder link" ng-click="dialogPhotofinderIsVisible=true">download and install</a> the <strong>Kooboodle PhotoFinder</strong>.
     </p>
 
     <hr />
@@ -30,7 +30,7 @@
                 <a ng-click="openUploader()" class="uploading-manual button button-large accent1">Upload photos manually</a>
             </div>
             <div class="button-container wide right">
-                <a class="uploading-pf button clickable button-large accent2" ng-click="showDialogPhotofinder()">Use PhotoFinder</a>
+                <a class="uploading-pf button clickable button-large accent2" ng-click="dialogPhotofinderIsVisible=true">Use PhotoFinder</a>
             </div>
         </div>
     </div>
@@ -60,7 +60,7 @@
     </div>
     <kb-dialog-photofinder ng-cloak
         ng-show="dialogPhotofinderIsVisible"
-        on-close="hideDialogPhotofinder()"
+        on-close="dialogPhotofinderIsVisible=false"
         on-action="saveEmailAddress()"
         notify-email="notifyEmail"></kb-dialog-photofinder>
 </div>

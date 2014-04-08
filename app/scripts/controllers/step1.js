@@ -7,7 +7,7 @@ angular.module('myappApp')
         $scope.$emit('wizardInactive');
         $scope.$emit('changeFlow', 'sender');
         $scope.nav1State = 'active';
-        $scope.isEventMsgShown = false;
+        //$scope.isEventMsgShown = false;
         $scope.setType = function (e, type) {
             requestObject.type = type;
             e.preventDefault();
