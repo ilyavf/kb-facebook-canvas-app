@@ -4,12 +4,14 @@ angular.module('myappApp')
     .controller('UserrequestsCtrl', function($scope, $location, CurrentUser, SendReminder, FbServices) {
         console.log('[UserrequestsCtrl]');
         window.$location = $location;
-        var requestMatch = location.search.match(/requestsubject=([\w\s\-\+'",\.;]*)/);
+        var requestMatch = location.search.match(/user=([\w\s\-\+'",\.;]+)&requestsubject=(\d+)/);
 
-        if (!CurrentUser.initialized && (requestMatch || $location.path() !== '/' && $location.path() !== '')) {
-            console.log('[UserrequestsCtrl] not initialized yet. Redirecting to init step...' + $location.path());
-            var requestSubject = requestMatch && requestMatch[1],
-                path = requestSubject ? '/receiver/' +  requestSubject : '/step1';
+        if (!CurrentUser.initialized && (requestMatch && requestMatch.length == 3 || $location.path() !== '/' && $location.path() !== '')) {
+            var requestUser = requestMatch && requestMatch[1],
+                requestSubject = requestMatch && requestMatch[2],
+                path = requestSubject ? '/receiver/' + requestUser + '/' +  requestSubject : '/step1';
+
+            console.log('[UserrequestsCtrl] not initialized yet. Redirecting to init step...' + $location.path(), requestMatch);
 
             //$location.path('/init' + path);
             $location.path(path);

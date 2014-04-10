@@ -44,7 +44,7 @@ angular.module('myappApp', [
                 controller: 'Step5Ctrl',
                 templateUrl:'views/step_final.html'
             })
-            .when('/receiver/:requestId', {
+            .when('/receiver/:userId/:subjectId', {
                 controller: 'Receiverstep1Ctrl',
                 templateUrl:'views/receiver_step1.html'
             });

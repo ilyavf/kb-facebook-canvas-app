@@ -70,7 +70,7 @@ angular.module('myappApp')
                 $scope.nextBtnLoading = true;
 
                 PrepareRequestData().then(function (requestData) {
-                    console.log('[nextIfValid] data is ready');
+                    console.log('[nextIfValid] data is ready', requestData);
 
                     if (requestData.recipients.length === 0) {
                         console.log('- all requests already sent');

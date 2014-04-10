@@ -5,11 +5,11 @@ angular.module('myappApp')
         $scope, $routeParams, $location, $upload, $q, $timeout, $rootScope,
         CurrentUser, getAlbumId, GetPhotoUrlPromise, GetUser, SendRequest
     ) {
-        console.log('[Receiverstep1Ctrl]:' + $routeParams['requestId']);
+        console.log('[Receiverstep1Ctrl]:' + $routeParams['userId'] + ', ' + $routeParams['subjectId']);
 
         var permissions = 'user_photos,publish_stream',
-            userId = $routeParams['userId'] || '1025306488',
-            subjectId = $routeParams['requestId'],
+            userId = $routeParams['userId'],
+            subjectId = $routeParams['subjectId'],
             isFirebaseReady = false,
             currentUser,
             $currentUserFireDeferred = $q.defer(),
@@ -67,7 +67,20 @@ angular.module('myappApp')
 
         // When we get here we don't want to ask Facebook immediately
         // instead we get user info from Firebase:
-        CurrentUser.getFireByUserId({id:userId}).then(function ($fire) {
+        if (userId) {
+            CurrentUser.getFireByUserId({id:userId}).then(function ($fire) {
+                onUserLoad($fire);
+            });
+        } else {
+            CurrentUser.$getFire().then(function ($fire) {
+                onUserLoad($fire);
+            });
+        }
+
+
+        /***  PRIVATE methods below  ***/
+
+        function onUserLoad ($fire) {
             $currentUserFireDeferred.resolve($fire);
             pendingRequest = getPendingRequest($fire);
 
@@ -83,7 +96,7 @@ angular.module('myappApp')
                 $scope.senderImgUrl = '//graph.facebook.com/' + pendingRequest.sender.username + '/picture';
                 $scope.subjectName = pendingRequest.subject.name;
             }
-        });
+        }
 
         function getPendingRequest($fire) {
             var pending = _.where($fire.received, {status: 'pending'}),
