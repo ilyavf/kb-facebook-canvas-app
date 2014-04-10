@@ -33,12 +33,14 @@ angular.module('myappApp')
                     user.msgSent = true;
                     $scope.done = true;
                     // save user:
-                    CurrentUser.$fire.$child('sent')
-                        .$child(requestObject.subject.id)
-                        .$child('recipients')
-                        .$child(user.id)
-                        .$child('directMessageSent')
-                        .$set(true);
+                    CurrentUser.$getFire().then(function ($fire) {
+                        $fire.$child('sent')
+                            .$child(requestObject.subject.id)
+                            .$child('recipients')
+                            .$child(user.id)
+                            .$child('directMessageSent')
+                            .$set(true);
+                    });
                 }
             });
         };

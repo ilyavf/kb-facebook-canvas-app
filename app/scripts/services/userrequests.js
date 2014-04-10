@@ -1,6 +1,12 @@
 'use strict';
 
 angular.module('myappApp')
-    .factory('UserRequests', function(CurrentUser) {
-        return CurrentUser.$fire.$child('sent');
+    .factory('UserRequests', function($q, CurrentUser) {
+        var deferred = $q.defer();
+        return function () {
+            CurrentUser.$getFire().then(function ($fire) {
+                deferred.resolve($fire.$child('sent'));
+            });
+            return deferred.promise;
+        };
     });

@@ -50,14 +50,18 @@ angular.module('myappApp')
                         if (result.status === 'success') {
                             user.isReminderSent = true;
                             user.date = new Date().toJSON();
-                            CurrentUser.$fire.$save();
+                            CurrentUser.$getFire().then(function ($fire) {
+                                $fire.$save();
+                            });
                         }
                         user.isLoading = '';
                     });
                 } else {
                     user.isReminderSent = true;
                     user.date = new Date().toJSON();
-                    CurrentUser.$fire.$save();
+                    CurrentUser.$getFire().then(function ($fire) {
+                        $fire.$save();
+                    });
                     user.isLoading = '';
                 }
             });
@@ -68,8 +72,11 @@ angular.module('myappApp')
                 && (!user.date || new Date(user.date).toDateString() != new Date().toDateString());
         };
 
-        CurrentUser.loginStatus.then(function () {
-            $scope.userdata = CurrentUser.$fire;
+        CurrentUser.isLoggedIn().then(function (status) {
+            return CurrentUser.$getFire();
+        })
+        .then(function ($fire) {
+            $scope.userdata = $fire;
         });
 
         console.log('[UserrequestsCtrl] finished');

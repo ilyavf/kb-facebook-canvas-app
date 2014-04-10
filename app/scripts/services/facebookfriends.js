@@ -3,48 +3,47 @@
 angular.module('myappApp')
     .factory('FacebookFriends', function($q, ExtendFacebookFriends, CurrentUser) {
         console.log('[FacebookFriends] init');
+        var deferred;
 
-        // initially we have this empty promise to comply with the api and reject it right away.
-        var deferred = $q.defer();
-        deferred.reject('FacebookFriends has to be initialized');
-
-        return function (shouldCreteNew) {
-            if (shouldCreteNew) {
-                deferred = newDeferred();
+        return function () {
+            if (!deferred) {
+                deferred = $q.defer();
+                loadFriends().then(function (result) {
+                    deferred.resolve(result);
+                }, function (error) {
+                    deferred.reject(error);
+                    deferred = null;
+                });
             }
             return deferred.promise;
         };
 
-        function newDeferred () {
+        function loadFriends () {
             var deferred = $q.defer();
 
             //FB.api('/me/friends?fields=username,name', function (response) {
 
-            CurrentUser.login('user_photos,user_relationships')
-                .then(function (profilePromise) {
-                    console.log('[FacebookFriends] promise resolved - user logged in. Waiting for user profile...');
-                    return profilePromise;
+            CurrentUser.requirePermission('user_photos,user_relationships')
+                .then(function () {
+                    console.log('[FacebookFriends] User logged in. Getting user profile...');
+                    return CurrentUser.getInfo();
                 })
                 .then(function () {
                     return fb_load_users();
                 })
                 .then(function (friends) {
                     deferred.resolve(friends);
-                }).catch(function (value) {
-                    console.log('[FacebookFriends] catch ' + value);
-                    deferred.reject(value);
-                    deferred = $q.defer();
-                    return deferred.promise;
+                }).catch(function (error) {
+                    console.log('[FacebookFriends] catch ' + error, error);
+                    deferred.reject(error);
                 });
 
-            return deferred;
+            return deferred.promise;
         };
 
 
         // To retrieve info from "family" table we need "user_relationships" permission.
-        // TODO: Run fb_login with {scope:'user_relationships'} here before the fql.
         function fb_load_users () {
-
             var deferred = $q.defer();
 
             FB.api('/fql', {
@@ -71,7 +70,6 @@ angular.module('myappApp')
                     var allFriendsRaw = _.where(response.data, {name: "all_friends"})[0].fql_result_set,
                         familyRaw = _.where(response.data, {name: "family_members"})[0].fql_result_set,
                         taggedMeRaw = _.where(response.data, {name: "tagged_me"})[0].fql_result_set,
-                        spouse = CurrentUser.info.spouse,
                         friends = ExtendFacebookFriends(allFriendsRaw);
 
                     _.each(friends, function(f) {
@@ -87,12 +85,25 @@ angular.module('myappApp')
                             f.taggedMe = true;
                         }
                     });
-                    if (spouse) {
-                        var friend = _.where(friends, {id: parseInt(spouse.id)})[0];
-                        if (friend) friend.relationship = 'spouse';
-                    }
-                    console.log('All friends: ' + friends.length);
-                    deferred.resolve(friends);
+
+                    console.log('[FacebookFriends] looking for user\'s significant other among friends...');
+                    CurrentUser.getInfo().then(function (info) {
+
+                        var spouse = info.spouse;
+                        if (spouse) {
+                            //var friend = _.where(friends, {id: parseInt(spouse.id)})[0];
+                            var friend = friends.reduce(function (prev, cur) {
+                                return cur.id == spouse.id ? cur : prev;
+                            }, false);
+
+                            if (friend) {
+                                console.log('[FacebookFriends] found user\'s spouse ' + friend.name);
+                                friend.relationship = 'spouse';
+                            }
+                        }
+                        console.log('All friends: ' + friends.length);
+                        deferred.resolve(friends);
+                    });
                 }
             });
 

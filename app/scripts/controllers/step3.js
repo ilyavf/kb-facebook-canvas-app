@@ -2,7 +2,8 @@
 
 angular.module('myappApp')
     .controller('Step3Ctrl', function Step3Ctrl(
-        $scope, $location, $window, FriendReceivers, FriendObjects, requestObject, PrepareRequestData, SaveRequestData, SendRequest
+        $scope, $location, $window, $q,
+        CurrentUser, FriendReceivers, FriendObjects, requestObject, PrepareRequestData, SaveRequestData, SendRequest
     ) {
         if (!requestObject.recipients.length) {
             console.log('- resetting recipients in friends array', requestObject);
@@ -12,14 +13,28 @@ angular.module('myappApp')
         }
         $scope.$emit('wizardActive');
 
+
+        $scope.onlyRelevantFriends = requestObject.subject.relationship == 'myself' ? true : false;
+        console.log('Step 3:');
+
         if (requestObject.type == 'myself') {
             requestObject.type = 'friend';
-            FriendObjects.then(function (friends) {
+            $q.all({
+                user: CurrentUser.getInfo(),
+                friends: FriendObjects
+            })
+            .then(function (resolved) {
+                var currentUserInfo = resolved.user,
+                    friends = resolved.friends,
+                    currentUser = friends.reduce(function(prev,cur){ return cur.id == currentUserInfo.id ? cur : prev }, {});
+
                 friends.reset();
-                friends[0].selected = true;
-                requestObject.subject = friends[0];
+                currentUser.selected = true;
+                requestObject.subject = currentUser;
                 requestObject.subject.type = 'friend';
                 $scope.selectedSubject = requestObject.subject.name;
+                $scope.onlyRelevantFriends = requestObject.subject.relationship == 'myself' ? true : false;
+                console.log('- friends resolved: ' + requestObject.subject.relationship, requestObject.subject);
             });
         }
 
@@ -30,9 +45,6 @@ angular.module('myappApp')
             //? FriendReceivers.filter(function (f) { return f.taggedMe; })
             //: FriendReceivers;
         });
-
-        console.log('Step 3');
-        $scope.onlyRelevantFriends = requestObject.subject.relationship == 'myself' ? true : false;
 
         $scope.selectedSubject = requestObject.subject.name;
         $scope.placeholder = 'Filter';
@@ -54,50 +66,55 @@ angular.module('myappApp')
                 $scope.invalidInput = 'animate-invalid-text';
                 console.log('[nextIfValid] not valid: ' + requestObject.recipients.length, requestObject);
             } else {
-                var requestData = PrepareRequestData();
-
-                if (requestData.recipients.length === 0) {
-                    console.log('- all requests already sent');
-                    $location.path('/step4');
-                    return;
-                }
-
+                console.log('- preparing request data...');
                 $scope.nextBtnLoading = true;
 
-                // send FB notifications/emails:
-                SendRequest({
-                    sender: requestData.currentUserInfo,
-                    subject: requestData.rsubject,
-                    type: 'request',
-                    recipients: requestData.recipients
-                }).then(function (response) {
-                    var data;
-                    try {
-                        data = JSON.parse(response.data.replace(/([^\}]*)$/g, ''));
-                    } catch (e) {
-                        console.log('*** Error *** unexpected answer from server', arguments);
+                PrepareRequestData().then(function (requestData) {
+                    console.log('[nextIfValid] data is ready');
+
+                    if (requestData.recipients.length === 0) {
+                        console.log('- all requests already sent');
+                        $location.path('/step4');
+                        return;
                     }
 
-                    if (data && data.notification_sent) {
-                        $scope.markUsers(requestObject.recipients, data.notification_sent);
-                        $scope.markUsers(requestData.recipients, data.notification_sent);
-                    }
+                    // send FB notifications/emails:
+                    console.log('- sending requests to FB...');
+                    SendRequest({
+                        sender: requestData.currentUserInfo,
+                        subject: requestData.rsubject,
+                        type: 'request',
+                        recipients: requestData.recipients
+                    })
+                    .then(function (response) {
+                        var data;
+                        try {
+                            data = JSON.parse(response.data.replace(/([^\}]*)$/g, ''));
+                        } catch (e) {
+                            console.log('*** Error *** unexpected answer from server', arguments);
+                        }
 
-                    //TODO: convert to a promise:
-                    SaveRequestData(requestData);
+                        if (data && data.notification_sent) {
+                            $scope.markUsers(requestObject.recipients, data.notification_sent);
+                            $scope.markUsers(requestData.recipients, data.notification_sent);
+                        }
 
-                    console.log('[SendRequest promise resolved]', arguments);
+                        console.log('[SendRequest promise resolved]. Saving to firebase...', arguments);
 
-                    $location.path('/step4');
-                }, function (response) {
-                    console.log('*** ERROR *** failed to send FB requests', arguments);
-                    $window.alert("System Error\n\nThere was an error while trying to send requests to Facebook."
-                        + "\n\nStatus: " + response.status
-                        + "\nMsg: " + response.data);
+                        SaveRequestData(requestData).then(function () {
+                            $location.path('/step4');
+                        });
 
-                    //$scope.markUsers(requestObject.recipients, [{id: '100004353247811'}]);
-                    //$location.path('/step4');
+                    }, function (response) {
+                        console.log('*** ERROR *** failed to send FB requests', arguments);
+                        $window.alert("System Error\n\nThere was an error while trying to send requests to Facebook."
+                            + "\n\nStatus: " + response.status
+                            + "\nMsg: " + response.data);
 
+                        $scope.nextBtnLoading = false;
+                    });
+                }, function (error) {
+                    console.log('Error while trying to prepare request data: ' + error);
                     $scope.nextBtnLoading = false;
                 });
             }
