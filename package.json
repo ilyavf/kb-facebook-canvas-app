@@ -1,7 +1,11 @@
 {
   "name": "myapp",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "express": "^4.0.0",
+    "reload": "^0.1.0",
+    "request": "^2.34.0"
+  },
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-autoprefixer": "~0.4.0",
