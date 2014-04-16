@@ -10,14 +10,27 @@ Tools used:
 - grunt (build tool)
 
 To build the project run from inside the project folder (see Gruntfile.js for task details):
-$ grunt build
+- $ grunt build
 
-To run tests run:
-$ grunt test
 
 ## NodeJS
 
-For sending Facebook App notifications use nodejs server api.
+The app itself is all static HTML/CSS/javascript. Could be hosted on any webserver.
+For sending Facebook App notifications we use NodeJS server api.
+
+### To run node webserver
+Run with environment parameter:
+- $ NODE_ENV=production node server.js
+- $ NODE_ENV=development node server.js
+
+This will serve the root url '/' for AngularJS app, and '/api' or '/canvas_app/api' for NodeJS api.
+Both app and api are running on the same port.
+
+For production environment predefined port is 1337. For dev it is 1347.
+
+To specify port directly run NodeJS server with the PORT parameter:
+- $ NODE_ENV=production, PORT=1234 node server.js
+
 
 ### To setup nodejs server with apache on the same machine
 
@@ -45,7 +58,7 @@ Add httpd config for app hosting on a subdomain:
 Or in a subfolder of existing apache domain:
 /etc/apache2/sites-enabled/proxy_to_nodejs.conf:
     ProxyPass /_fb/canvas_app/ http://localhost:1337/
-    ProxyPass /fb_api http://localhost:1337/api
+    ProxyPass /canvas_app/api http://localhost:1337/api
 ```
 
 - run nodejs:

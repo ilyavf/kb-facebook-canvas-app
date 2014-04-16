@@ -2,12 +2,13 @@
 
 angular.module('myappApp')
     .factory('SendRequest', function ($http, $location) {
-        var server = $location.host(),
-            port = '1337',
-            proto = $location.protocol(),
+        var //server = $location.host(),
+            //port = '1337',
+            //proto = $location.protocol(),
             //path = '/cf/_fb/sendRequest.json',
-            path = '/fb_api/send-notification',
-            url = proto + '://' + server + ':' + port + path,
+            //path = '/fb_api/send-notification',
+            //url = proto + '://' + server + ':' + port + path,
+            url = '/api/send-notification',
             appUrl = $location.absUrl().slice(0, $location.absUrl().indexOf('#'));
         window.llocation = $location;
 
