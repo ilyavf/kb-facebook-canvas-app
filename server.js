@@ -14,11 +14,25 @@ var clientDir = path.join(__dirname, 'app');
 app.set('port', 1337);
 app.use(express.static(clientDir));
 
+// CORS:
+app.all('*', function(req, res, next){
+    if (!req.get('Origin')) return next();
+    // use "*" here to accept any origin
+    res.set('Access-Control-Allow-Origin', 'http://testb.kooboodle.com');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    if ('OPTIONS' == req.method) return res.send(200);
+    next();
+});
+
 // Routing:
 app.get('/', function(req, res) {
     res.sendfile(path.join(clientDir, 'index.html'));
 });
-app.get('/api/send-notification', fb.sendNotification);
+app.get('/fb_api/send-notification', fb.sendNotification);
+app.get('/cf/_fb/sendRequest.json', fb.sendNotification);
+app.post('/cf/_fb/sendRequest.json', fb.sendNotification);
+
 
 // Error handling:
 app.use(logErrors);
