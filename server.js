@@ -4,6 +4,7 @@ var express = require('express')
     , http = require('http')
     , path = require('path')
     , fb = require('./server/api/fb')
+    , bodyParser = require('body-parser')
 //    , reload = require('reload')
 //    , colors = require('colors')
 
@@ -13,6 +14,7 @@ var clientDir = path.join(__dirname, 'app');
 
 app.set('port', 1337);
 app.use(express.static(clientDir));
+app.use(bodyParser());
 
 // CORS:
 app.all('*', function(req, res, next){

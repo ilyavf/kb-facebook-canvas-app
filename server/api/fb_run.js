@@ -6,7 +6,7 @@ fb.testSendRequest(
     {id: '100004353247811', name: 'Ilya'},
     {id: '100006414373418', name: 'Serezha', type: 'friend'},
     //{id: '100004353247811', name: 'Ilya', type: 'friend'},
-    'Hey, gimme some photos of myself!'
+    '{sender} asked you to share photos of {subject}'
 ).then(function (msg) {
     console.log('Success: ' + msg);
 }, function (err) {

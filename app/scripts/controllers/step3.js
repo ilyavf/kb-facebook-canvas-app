@@ -87,12 +87,14 @@ angular.module('myappApp')
                         recipients: requestData.recipients
                     })
                     .then(function (response) {
-                        var data;
-                        try {
-                            data = JSON.parse(response.data.replace(/([^\}]*)$/g, ''));
-                        } catch (e) {
-                            console.log('*** Error *** unexpected answer from server', arguments);
-                        }
+                        var data = response && response.data;
+
+                        //try {
+                        //    //OpenPhoto bug: extra symbol in the end - get rid of it:
+                        //    data = JSON.parse(response.data.replace(/([^\}]*)$/g, ''));
+                        //} catch (e) {
+                        //    console.log('*** Error *** unexpected answer from server', arguments);
+                        //}
 
                         if (data && data.notification_sent) {
                             $scope.markUsers(requestObject.recipients, data.notification_sent);

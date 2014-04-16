@@ -12,7 +12,34 @@ var app_token;
 
 var sendNotification = function (req, res) {
     console.log('module fb.sendNotification');
-    res.json({test: 'fb.sendNotification.ok'});
+
+    var sender = req.param('sender'),
+        subject = req.param('subject'),
+        type = req.param('type') || 'request',  // 'request' | 'response'
+        photos = req.param('photos') || 0,
+        //customMessage = req.param('message'),
+        contacts = req.param('contacts'),
+        messageTpl = type === 'request'
+            ? '{sender} asked you to share photos of {subject}'
+            : '{sender} uploaded {photos_amount} photo{plural} of {subject}'
+                .replace('{photos_amount}', photos)
+                .replace('{plural}', (photos > 1 ? 's' : '')),
+        result = {notification_sent:[], failed:[], subject: subject},
+        promises = [];
+
+    contacts.forEach(function (user) {
+        promises.push(testSendRequest(sender, user, subject, messageTpl)
+            .then(function () {
+                result.notification_sent.push(user);
+            }, function (err) {
+                result.failed.push({id:user.id, reason: err});
+            })
+        );
+    });
+
+    Q.all(promises).done(function () {
+        res.json(result);
+    });
 };
 
 module.exports = {
@@ -21,44 +48,42 @@ module.exports = {
     testSendRequest: testSendRequest
 };
 
-function testSendRequest (sender, recipient, subject) {
+function testSendRequest (sender, recipient, subject, messageTpl) {
 
     var deferred = Q.defer(),
         appUrl = APP_URL_REQUEST
             .replace('{user_id}', recipient.id)
             .replace('{subject_id}', subject.id);
 
-    var messageSender = '@[{sender_id}] asked you to share photos of {subject}'
-            .replace('{sender_id}', sender.id),
+    var messageSender = messageTpl
+            .replace('{sender}', '@[' + sender.id + ']'),
         message = messageSender
         .replace('{subject}', subject.type == 'friend' ? '@[' + subject.id + ']' : subject.name);
 
     sendSingleNotification(recipient, appUrl, message)
         .then(function (response) {
-            console.log('[testSendRequest] Notification was sent successfully: ' + response);
+            console.log('[testSendRequest] Notification was sent successfully to: ' + recipient.name);
             deferred.resolve('Sent to ' + recipient.name);
         }, function (error) {
-            console.log('[testSendRequest]: sendSingleNotification rejected with: ' + error);
-
             if (error.search('Cannot send') != -1) {
-                console.log('- rejecting with: Recipient is not an app user');
+                console.log('- rejecting with: Recipient ' + recipient.name + ' is not an app user');
                 deferred.reject('Recipient is not an app user');
             } else if (error.search('Cannot tag') != -1) {
-                console.log('- trying to send without tag...');
+                console.log('- trying to send without tag... to: ' + recipient.name);
 
                 message = messageSender
                     .replace('{subject}', subject.name);
 
                 sendSingleNotification(recipient, appUrl, "Try #2: " + message)
                     .then(function (response) {
-                        console.log('[testSendRequest] Notification was sent successfully from the 2nd TRY: ' + response.success);
+                        console.log('[testSendRequest] Notification was sent successfully from the 2nd TRY to: ' + recipient.name);
                         deferred.resolve('Sent to ' + recipient.name);
                     }, function (err) {
-                        console.log('2nd try failed: ' + JSON.stringify(err));
+                        console.log('2nd try failed for: ' + recipient.name + '. ' + JSON.stringify(err));
                         deferred.reject(JSON.stringify(err));
                     });
             } else {
-                deferred.reject('Failed: ' + JSON.stringify(error));
+                deferred.reject('Failed for: ' + recipient.name + '. Reason: ' + JSON.stringify(error));
             }
         });
 
@@ -74,7 +99,7 @@ function sendSingleNotification (recipient, appUrl, message) {
             href: appUrl
         };
 
-    console.log('[sendSingleNotification] sending: ' + message);
+    console.log('[sendSingleNotification] sending to ' + recipient.name + ': ' + message);
 
     if (!app_token) {
         app_token = getAppToken();
@@ -83,15 +108,14 @@ function sendSingleNotification (recipient, appUrl, message) {
     app_token
         .then(function (token) {
             params.access_token = token;
-            console.log('[sendSingleNotification] token resolved with: ' + token);
-
             return post(url, params);
         })
         .then(function (response) {
-            console.log('[sendSingleNotification] post resolved with: ' + response);
             deferred.resolve(response);
         }, function (error) {
-            console.log('[sendSingleNotification] post rejected with: ' + error);
+            deferred.reject(error);
+        })
+        .catch(function (error) {
             deferred.reject(error);
         });
 
@@ -104,13 +128,11 @@ function getAppToken () {
     var url = FB_APP_TOKEN_URL
         .replace('{client_id}', APP_ID)
         .replace('{client_secret}', APP_SECRET);
-    console.log('get ' + url);
     request.get(
         url,
         function (error, response, body) {
             if (!error && response.statusCode == 200 && body.match(/access_token/)) {
-                //access_token=203880539796100|C01i0Zsy2eZ-04UVzaCH3Grobow
-                console.log('ok: ' + body);
+                //response format: "access_token=203880539796100|C01i0Zsy2eZ-04UVzaCH3Grobow"
                 var tokenMatch = body.match(/access_token=(.*)/),
                     token = tokenMatch && tokenMatch[1];
 
@@ -128,16 +150,13 @@ function getAppToken () {
 function post (url, params) {
     var deferred = Q.defer();
 
-    console.log('post to ' + url + ', ', params);
     request.post(
         url,
         { form: params },
         function (error, response, body) {
             if (!error && response.statusCode == 200) {
-                console.log('ok: ' + body);
                 deferred.resolve(JSON.parse(body));
             } else {
-                console.log('error: ' + body);
                 deferred.reject(JSON.parse(body).error.message);
             }
         }

@@ -5,7 +5,8 @@
     "express": "^4.0.0",
     "reload": "^0.1.0",
     "request": "^2.34.0",
-    "q": "^1.0.1"
+    "q": "^1.0.1",
+    "body-parser": "^1.0.2"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

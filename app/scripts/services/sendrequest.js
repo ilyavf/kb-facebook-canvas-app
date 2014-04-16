@@ -3,9 +3,10 @@
 angular.module('myappApp')
     .factory('SendRequest', function ($http, $location) {
         var server = $location.host(),
+            port = '1337',
             proto = $location.protocol(),
             path = '/cf/_fb/sendRequest.json',
-            url = proto + '://' + server + path,
+            url = proto + '://' + server + ':' + port + path,
             appUrl = $location.absUrl().slice(0, $location.absUrl().indexOf('#'));
         window.llocation = $location;
 
