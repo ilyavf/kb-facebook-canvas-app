@@ -2,7 +2,7 @@
 // $ NODE_ENV=production node server.js
 // $ NODE_ENV=test node server.js
 // To specify port directly:
-// $ NODE_ENV=production, PORT=1234 node server.js
+// $ NODE_ENV=production, PORT=1234, PORT_SSL=1235 node server.js
 
 if (!process.env.NODE_ENV) {
     process.env.NODE_ENV='development';
@@ -17,6 +17,7 @@ var express = require('express'),
     fs = require('fs');
 
 var APP_PORT = process.env.PORT || 1337,
+    APP_PORT_SECURE = process.env.PORT_SSL || 1338,
     app_dir = process.env.NODE_ENV === 'production' ? 'dist' : 'app',
     //API_PORT = 1338,
     clientDir = path.join(__dirname, app_dir),
@@ -57,21 +58,24 @@ app.use(clientErrorHandler);
 app.listen(APP_PORT);
 //api.listen(API_PORT);
 
-console.log(process.env.NODE_ENV.toUpperCase() +  ' Node app webserver listens ' + APP_PORT + '. Client app folder: ' + clientDir);
 //console.log('Node api webserver listens ' + API_PORT);
 
 
 
 // HTTPS
-var options = {
+var credentials = {
     key: fs.readFileSync('../ssl/kooboodle.key'),
     cert: fs.readFileSync('../ssl/kooboodle.crt')
 };
 
-https.createServer(options, function (req, res) {
-    res.writeHead(200);
-    res.end("Hello secure world!\n");
-}).listen(1338);
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(APP_PORT);
+httpsServer.listen(APP_PORT_SECURE);
+
+console.log(process.env.NODE_ENV.toUpperCase() +  ' Node app webserver listens ' + APP_PORT + '. Client app folder: ' + clientDir);
+console.log('HTTPS:  on port ' + APP_PORT_SECURE);
 
 
 

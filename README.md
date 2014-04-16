@@ -28,8 +28,19 @@ Both app and api are running on the same port.
 
 For production environment predefined port is 1337. For dev it is 1347.
 
-To specify port directly run NodeJS server with the PORT parameter:
-- $ NODE_ENV=production, PORT=1234 node server.js
+To specify port directly run NodeJS server with the PORT and PORT_SSL parameters:
+- $ NODE_ENV=production, PORT=1234, PORT_SSL=1235 node server.js
+
+
+### SSL
+
+NodeJS will expect ssl certificate and key to be stored in "../ssl" folder
+
+```cmd
+$ cd ../ssl
+$ ln -s /etc/apache2/ssl/kooboodle.crt
+$ ln -s /etc/apache2/ssl/kooboodle.key
+```
 
 
 ### To setup nodejs server with apache on the same machine
