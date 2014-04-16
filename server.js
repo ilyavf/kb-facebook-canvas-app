@@ -14,9 +14,10 @@ var express = require('express'),
     fb = require('./server/api/fb'),
     bodyParser = require('body-parser');
 
-var APP_PORT = process.env.PORT || (process.env.NODE_ENV === 'production' ? 1337 : 1347),
+var APP_PORT = process.env.PORT || 1337,
+    app_dir = process.env.NODE_ENV === 'production' ? 'dist' : 'app',
     //API_PORT = 1338,
-    clientDir = path.join(__dirname, 'app'),
+    clientDir = path.join(__dirname, app_dir),
     //api = express(),
     app = express();
 
