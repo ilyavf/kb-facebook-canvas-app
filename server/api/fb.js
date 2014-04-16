@@ -1,5 +1,5 @@
-var request = require('request');
-var Q = require('q');
+var request = require('request'),
+    Q = require('q');
 
 const APP_ID = '203880539796100';
 const APP_SECRET = '6569db13948e289d85ed5b415c1726f9';
@@ -10,7 +10,7 @@ const APP_URL_REQUEST = '?user={user_id}&requestsubject={subject_id}';
 
 var app_token;
 
-var sendNotification = function (req, res) {
+var sendNotifications = function (req, res) {
     console.log('module fb.sendNotification');
 
     var sender = req.param('sender'),
@@ -32,7 +32,7 @@ var sendNotification = function (req, res) {
     if (!contacts) return res.json({error: true, message: 'Contacts are not specified'});
 
     contacts.forEach(function (user) {
-        promises.push(testSendRequest(sender, user, subject, messageTpl)
+        promises.push(sendSingleRequest(sender, user, subject, messageTpl)
             .then(function () {
                 result.notification_sent.push(user);
             }, function (err) {
@@ -47,12 +47,12 @@ var sendNotification = function (req, res) {
 };
 
 module.exports = {
-    sendNotification: sendNotification,
+    sendNotification: sendNotifications,
     sendSingleNotification: sendSingleNotification,
-    testSendRequest: testSendRequest
+    testSendRequest: sendSingleRequest
 };
 
-function testSendRequest (sender, recipient, subject, messageTpl) {
+function sendSingleRequest (sender, recipient, subject, messageTpl) {
 
     var deferred = Q.defer(),
         appUrl = APP_URL_REQUEST

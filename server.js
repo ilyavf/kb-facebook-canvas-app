@@ -32,6 +32,7 @@ app.get('/', function(req, res) {
     res.sendfile(path.join(clientDir, 'index.html'));
 });
 app.get('/fb_api/send-notification', fb.sendNotification);
+app.post('/fb_api/send-notification', fb.sendNotification);
 app.get('/cf/_fb/sendRequest.json', fb.sendNotification);
 app.post('/cf/_fb/sendRequest.json', fb.sendNotification);
 
