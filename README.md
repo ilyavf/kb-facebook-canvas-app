@@ -42,6 +42,25 @@ $ ln -s /etc/apache2/ssl/kooboodle.crt
 $ ln -s /etc/apache2/ssl/kooboodle.key
 ```
 
+### Upstart on Ubuntu
+
+Copy 'nodejs-facebook-canvas-app.conf' to folder /etc/init/.
+```cmd
+/etc/init/nodejs-facebook-canvas-app.conf:
+...
+    exec sudo node /var/www/apps.kooboodle.com/fb_canvas_dev/server.js >> /var/log/node.log 2>&1
+...
+
+Try and check logs:
+
+$ sudo start nodejs-facebook-canvas-app
+
+$ tail /var/log/node.log
+DEVELOPMENT. Client app folder: /var/www/apps.kooboodle.com/fb_canvas_dev/app
+HTTP:  on port 1337
+HTTPS:  on port 1338
+
+```
 
 ### To setup nodejs server with apache on the same machine
 
