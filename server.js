@@ -12,7 +12,9 @@ var express = require('express'),
     http = require('http'),
     path = require('path'),
     fb = require('./server/api/fb'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    https = require('https'),
+    fs = require('fs');
 
 var APP_PORT = process.env.PORT || 1337,
     app_dir = process.env.NODE_ENV === 'production' ? 'dist' : 'app',
@@ -57,6 +59,20 @@ app.listen(APP_PORT);
 
 console.log(process.env.NODE_ENV.toUpperCase() +  ' Node app webserver listens ' + APP_PORT + '. Client app folder: ' + clientDir);
 //console.log('Node api webserver listens ' + API_PORT);
+
+
+
+// HTTPS
+var options = {
+    key: fs.readFileSync('../ssl/kooboodle.key'),
+    cert: fs.readFileSync('../ssl/kooboodle.crt')
+};
+
+https.createServer(options, function (req, res) {
+    res.writeHead(200);
+    res.end("Hello secure world!\n");
+}).listen(1338);
+
 
 
 function logErrors(err, req, res, next) {
