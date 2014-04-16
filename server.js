@@ -20,6 +20,7 @@ var APP_PORT = process.env.PORT || 1337,
     APP_PORT_SECURE = process.env.PORT_SSL || 1338,
     app_dir = process.env.NODE_ENV === 'production' ? 'dist' : 'app',
     clientDir = path.join(__dirname, app_dir),
+    ssl_dir = path.join(__dirname, '../ssl'),
     app = express();
 
 app.use(express.static(clientDir));
@@ -52,8 +53,8 @@ app.use(clientErrorHandler);
 
 // HTTPS options:
 var credentials = {
-    key: fs.readFileSync('../ssl/kooboodle.key'),
-    cert: fs.readFileSync('../ssl/kooboodle.crt')
+    key: fs.readFileSync(ssl_dir + '/kooboodle.key'),
+    cert: fs.readFileSync(ssl_dir + '/kooboodle.crt')
 };
 
 var httpServer = http.createServer(app);
