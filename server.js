@@ -55,7 +55,7 @@ app.use(clientErrorHandler);
 app.listen(APP_PORT);
 //api.listen(API_PORT);
 
-console.log(process.env.NODE_ENV.toUpperCase() +  ' Node app webserver listens ' + APP_PORT);
+console.log(process.env.NODE_ENV.toUpperCase() +  ' Node app webserver listens ' + APP_PORT + '. Client app folder: ' + clientDir);
 //console.log('Node api webserver listens ' + API_PORT);
 
 
