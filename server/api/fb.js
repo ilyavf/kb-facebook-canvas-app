@@ -27,6 +27,10 @@ var sendNotification = function (req, res) {
         result = {notification_sent:[], failed:[], subject: subject},
         promises = [];
 
+    if (!sender) return res.json({error: true, message: 'Sender is not specified'});
+    if (!subject) return res.json({error: true, message: 'Subject is not specified'});
+    if (!contacts) return res.json({error: true, message: 'Contacts are not specified'});
+
     contacts.forEach(function (user) {
         promises.push(testSendRequest(sender, user, subject, messageTpl)
             .then(function () {

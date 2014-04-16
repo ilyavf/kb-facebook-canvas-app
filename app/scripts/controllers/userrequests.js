@@ -39,12 +39,7 @@ angular.module('myappApp')
             console.log('[sendReminder]', user, subject);
             user.isLoading = 'loading';
             SendReminder(user, subject).then(function (response) {
-                var data;
-                try {
-                    data = JSON.parse(response.data.replace(/([^\}]*)$/g, ''));
-                } catch (e) {
-                    console.log('*** Error *** unexpected answer from server', arguments);
-                }
+                var data = response && response.data;
 
                 // send FB dialog msg if app notification failed:
                 if (!data || !data.notification_sent || data.notification_sent.length === 0) {
