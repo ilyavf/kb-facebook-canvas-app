@@ -13,11 +13,17 @@ angular.module('myappApp')
         $scope.selectedSubject = requestObject.subject.name;
 
         $scope.done = $scope.nonKbUsers.length > 0 && $scope.nonKbUsers.filter(function(u){ return u.msgSent;}).length === 0 ? false : true;
+        $scope.dialogUserinvitation = false;
 
-        $scope.nextIfValid = function ($event) {
-            if (!$scope.done) {
-                $event.preventDefault();
-                return false;
+        $scope.next = function () {
+            $location.path("/step5");
+        };
+
+        $scope.nextIfValid = function () {
+            if ($scope.done) {
+                $scope.next();
+            } else {
+                $scope.dialogUserinvitation = true;
             }
         };
 

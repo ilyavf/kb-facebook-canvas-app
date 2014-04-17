@@ -11,8 +11,8 @@
 <div ng-if="nonKbUsers.length > 0">
     <h3>
         <strong>Step 4:</strong>
-        Invite your friend{{nonKbUsers.length > 1 ? 's' : ''}} to Kooboodle and ask {{nonKbUsers.length > 1 ? 'them' : 'him'}}
-        to send you photos of <b>{{selectedSubject}}</b>
+        Click the “Invite” button for {{nonKbUsers.length > 1 ? 'each of' : ''}} your friend{{nonKbUsers.length > 1 ? 's' : ''}} below to invite {{nonKbUsers.length > 1 ? 'them' : 'him'}}
+        and ask {{nonKbUsers.length > 1 ? 'them' : 'him'}} to send you photos of <b>{{selectedSubject}}</b>
     </h3>
 
     <ul class="friend-list">
@@ -40,5 +40,10 @@
 
 <div class="nav-buttons">
     <a class="step4-back btn button button-large prev" ng-click="saveMessage();" href="#/step3">Back</a>
-    <a class="send-message btn button button-large next {{done ? '' : 'disabled'}}" ng-click="nextIfValid($event);" href="#/step5">Done</a>
+    <a class="send-message btn button button-large next" ng-click="nextIfValid()">Done</a>
 </div>
+
+<kb-dialog-userinvitation ng-cloak
+                          ng-show="dialogUserinvitation"
+                          on-close="dialogUserinvitation=false"
+                          on-action="next();"></kb-dialog-userinvitation>
