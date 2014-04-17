@@ -2,7 +2,7 @@
 
 angular.module('myappApp')
     .factory('FbServices', function ($q) {
-        const APP_URL_REQUEST = 'https://apps.facebook.com/kooboodle/?user={user_id}&requestsubject={subject_id}';
+        var APP_URL_REQUEST = 'https://apps.facebook.com/kooboodle/?user={user_id}&requestsubject={subject_id}';
 
         // Public API here
         return {
