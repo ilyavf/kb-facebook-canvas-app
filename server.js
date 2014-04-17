@@ -28,7 +28,7 @@ var express = require('express'),
 var APP_PORT = process.env.PORT || 1337,
     APP_PORT_SECURE = process.env.PORT_SSL || 1338,
     SSL = process.env.SSL == 'false' ? false : true,
-    app_dir = process.env.NODE_ENV === 'production' ? 'dist' : 'app',
+    app_dir = process.env.NODE_ENV === 'production' ? 'dist_prod' : 'app',
     clientDir = path.join(__dirname, app_dir),
     ssl_dir = path.join(__dirname, '../ssl'),
     app = express();
