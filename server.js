@@ -1,8 +1,17 @@
-// Run with environment parameter:
-// $ NODE_ENV=production node server.js
-// $ NODE_ENV=test node server.js
-// To specify port directly:
-// $ NODE_ENV=production, PORT=1234, PORT_SSL=1235 node server.js
+/**
+ * Run with environment parameter:
+ * $ NODE_ENV=production node server.js
+ * $ NODE_ENV=test node server.js
+ *
+ * To specify port directly:
+ * $ NODE_ENV=production, PORT=1234, PORT_SSL=1235 node server.js
+ *
+ * To disable ssl:
+ * $ PORT_SSL=0 node server.js
+ *
+ */
+
+
 
 if (!process.env.NODE_ENV) {
     process.env.NODE_ENV='development';
@@ -18,6 +27,7 @@ var express = require('express'),
 
 var APP_PORT = process.env.PORT || 1337,
     APP_PORT_SECURE = process.env.PORT_SSL || 1338,
+    SSL = process.env.SSL == 'false' ? false : true,
     app_dir = process.env.NODE_ENV === 'production' ? 'dist' : 'app',
     clientDir = path.join(__dirname, app_dir),
     ssl_dir = path.join(__dirname, '../ssl'),
@@ -51,24 +61,32 @@ app.all('/', function(req, res) {
 app.use(logErrors);
 app.use(clientErrorHandler);
 
-// HTTPS options:
-var credentials = {
-    key: fs.readFileSync(ssl_dir + '/kooboodle.key'),
-    cert: fs.readFileSync(ssl_dir + '/kooboodle.crt')
-};
-
 var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
-
 httpServer.listen(APP_PORT);
-httpsServer.listen(APP_PORT_SECURE);
 
-console.log(process.env.NODE_ENV.toUpperCase() + '. Client app folder: ' + clientDir);
-console.log('HTTP:  on port ' + APP_PORT);
-console.log('HTTPS:  on port ' + APP_PORT_SECURE);
+console.log(timestamp() + process.env.NODE_ENV.toUpperCase() + '. Client app folder: ' + clientDir);
+console.log(timestamp() + 'HTTP:  on port ' + APP_PORT);
+
+if (SSL) {
+    // HTTPS options:
+    var credentials = {
+        key: fs.readFileSync(ssl_dir + '/kooboodle.key'),
+        cert: fs.readFileSync(ssl_dir + '/kooboodle.crt')
+    };
+
+    https
+        .createServer(credentials, app)
+        .listen(APP_PORT_SECURE);
+
+    console.log(timestamp() + 'HTTPS:  on port ' + APP_PORT_SECURE);
+} else {
+    console.log(timestamp() + 'NO SSL');
+}
 
 
-
+function timestamp () {
+    return '[' + new Date().toJSON().replace('T',' ').replace(/.{5}$/,'') + '] ';
+}
 function logErrors(err, req, res, next) {
     console.error(err.stack);
     next(err);

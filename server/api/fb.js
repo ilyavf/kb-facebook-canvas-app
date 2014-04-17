@@ -11,7 +11,7 @@ const APP_URL_REQUEST = '?user={user_id}&requestsubject={subject_id}';
 var app_token;
 
 var sendNotifications = function (req, res) {
-    console.log('module fb.sendNotification');
+    console.log(timestamp() + 'module fb.sendNotification');
 
     var sender = req.param('sender'),
         subject = req.param('subject'),
@@ -66,24 +66,24 @@ function sendSingleRequest (sender, recipient, subject, messageTpl) {
 
     sendSingleNotification(recipient, appUrl, message)
         .then(function (response) {
-            console.log('[testSendRequest] Notification was sent successfully to: ' + recipient.name);
+            console.log(timestamp() + '[testSendRequest] Notification was sent successfully to: ' + recipient.name);
             deferred.resolve('Sent to ' + recipient.name);
         }, function (error) {
             if (error.search('Cannot send') != -1) {
-                console.log('- rejecting with: Recipient ' + recipient.name + ' is not an app user');
+                console.log(timestamp() + '- rejecting with: Recipient ' + recipient.name + ' is not an app user');
                 deferred.reject('Recipient is not an app user');
             } else if (error.search('Cannot tag') != -1) {
-                console.log('- trying to send without tag... to: ' + recipient.name);
+                console.log(timestamp() + '- trying to send without tag... to: ' + recipient.name);
 
                 message = messageSender
                     .replace('{subject}', subject.name);
 
                 sendSingleNotification(recipient, appUrl, "Try #2: " + message)
                     .then(function (response) {
-                        console.log('[testSendRequest] Notification was sent successfully from the 2nd TRY to: ' + recipient.name);
+                        console.log(timestamp() + '[testSendRequest] Notification was sent successfully from the 2nd TRY to: ' + recipient.name);
                         deferred.resolve('Sent to ' + recipient.name);
                     }, function (err) {
-                        console.log('2nd try failed for: ' + recipient.name + '. ' + JSON.stringify(err));
+                        console.log(timestamp() + '2nd try failed for: ' + recipient.name + '. ' + JSON.stringify(err));
                         deferred.reject(JSON.stringify(err));
                     });
             } else {
@@ -103,7 +103,7 @@ function sendSingleNotification (recipient, appUrl, message) {
             href: appUrl
         };
 
-    console.log('[sendSingleNotification] sending to ' + recipient.name + ': ' + message);
+    console.log(timestamp() + '[sendSingleNotification] sending to ' + recipient.name + ': ' + message);
 
     if (!app_token) {
         app_token = getAppToken();
@@ -167,4 +167,8 @@ function post (url, params) {
     );
 
     return deferred.promise;
+}
+
+function timestamp () {
+    return '[' + new Date().toJSON().replace('T',' ').replace(/.{5}$/,'') + '] ';
 }
