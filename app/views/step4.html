@@ -3,16 +3,12 @@
 <div ng-include="'views/nav.html'"></div>
 
 <!--<p style="text-decoration: line-through">Kooboodle will create a Facebook photo album named "Photos of {{selectedSubject}} (Kooboodle)". The album will only be visible to you and to the people who contributed photos to it.</p>-->
-<p class="info">
-    Once a friend uploads photos of <strong>{{selectedSubject}}</strong>, Kooboodle will store them in an album called <strong>"Photos of {{selectedSubject}} from Sender Name via Kooboodle"</strong>.
-    This album will only be visible to you, and the friend who uploaded the photos.
-</p>
 
 <div ng-if="nonKbUsers.length > 0">
     <h3>
         <strong>Step 4:</strong>
         Click the “Invite” button for {{nonKbUsers.length > 1 ? 'each of' : ''}} your friend{{nonKbUsers.length > 1 ? 's' : ''}} below to invite {{nonKbUsers.length > 1 ? 'them' : 'him'}}
-        and ask {{nonKbUsers.length > 1 ? 'them' : 'him'}} to send you photos of <b>{{selectedSubject}}</b>
+        and ask to send you photos of <b>{{selectedSubject}}</b>
     </h3>
 
     <ul class="friend-list">

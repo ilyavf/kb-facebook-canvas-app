@@ -2,6 +2,11 @@
 <h2 ng-if="isValid == false">Almost There</h2>
 
 <div ng-if="isValid">
+    <p class="info">
+        Once a friend uploads photos of <strong>{{selectedSubject}}</strong>, Kooboodle will store them in an album called <strong>"Photos of {{selectedSubject}} from Sender Name via Kooboodle"</strong>.
+        This album will only be visible to you, and the friend who uploaded the photos.
+    </p>
+
     <p>Your request for photos of <b>{{selectedSubject}}</b> has been sent to: <b>{{recipients}}</b>.</p>
 
     <p>
